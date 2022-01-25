@@ -4,4 +4,4 @@ default:
 	gcc lex.yy.c 
 
 clean:
-	del a.exe lex.yy.c
+	rm a.out lex.yy.c

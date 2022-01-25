@@ -1,17 +1,19 @@
 /*Autor: Leonardo de Souza Augusto - 278998 */
-#include "main.c"
-int isRunning = 0;
 
 %%
 
-
-
 teste           {printf("Teste bem sucedido!\n");}
 0*              {printf("Sequencia de zeros\n");}
+"is running?"     {printf(isRunning() ? "True" : "False");}
 
 [ \n\t]
 
 %%
+
+#include "main.c"
+
+int running = 0;
+
 
 int getLineNumber () {
     // TODO 
@@ -19,7 +21,7 @@ int getLineNumber () {
 }
 
 int isRunning () {
-    return isRunning;
+    return running;
 }
 
 int yywrap() {

@@ -1,8 +1,12 @@
 //Autor: Leonardo de Souza Augusto - 278998
 
+#include <stdio.h>
+
+extern int running;
+
 int main (){
     printf("Lex Started!\n");
-    isRunning = 1;
+    running = 1;
     yylex();
-    isRunning = 0;
+    running = 0;
 }
