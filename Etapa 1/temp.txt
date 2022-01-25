@@ -1,0 +1,19 @@
+char            {}
+int             {}
+float           {}
+
+if              {}
+then            {}
+else            {}
+while           {}
+goto            {}
+read            {}
+print           {}
+return          {}
+<=              {}
+>=              {}
+==              {}
+!=              {}
+[0-9]           {}
+[a-z]           {}
+[a-z]*          {}
