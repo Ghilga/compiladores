@@ -1,10 +1,12 @@
 {
 	"folders": [
 		{
-			"path": "aula01"
-		},
-		{
 			"path": "Etapa 1"
 		}
-	]
+	],
+	"settings": {
+		"files.associations": {
+			"*.l": "lex"
+		}
+	}
 }
