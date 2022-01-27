@@ -1,7 +1,9 @@
 /*Autor: Leonardo de Souza Augusto - 278998 */
 
 %{
-#include "main.c"
+#include "hash.h"
+#include "tokens.h"
+
 
 int getLineNumber();
 int isRunning();
@@ -12,15 +14,13 @@ int running = 1;
 %}
 
 %x COMMENT
-%x STRING
 
 %%
 
-linha               { printf("Linhas: %d\n", lineNumber); }
+linha               { printf("Linha: %d\n", lineNumber); }
 char                { return KW_CHAR; }
 int                 { return KW_INT; }
 float               { return KW_FLOAT; }
-
 if                  { return KW_IF; }
 then                { return KW_THEN; }
 else                { return KW_ELSE; }
@@ -30,33 +30,33 @@ read                { return KW_READ; }
 print               { return KW_PRINT; }
 return              { return KW_RETURN; }
 
-teste               { printf("Teste bem sucedido!\n"); return TOKEN_ERROR; }
 "<="                { return OPERATOR_LE; }
 ">="                { return OPERATOR_GE; }
 "=="                { return OPERATOR_EQ; }
 "!="                { return OPERATOR_DIF; }
 
-[0-9]               { return LIT_INTEGER; }
-[a-z]               { printf("Caractere %c\n", yytext[0]); return LIT_CHAR; }
-[a-z]+              { printf("String %s\n", yytext); return LIT_STRING; }
+\".+\"              { hashInsert(yytext, LIT_STRING); return LIT_STRING; }
+[0-9]+              { hashInsert(yytext, LIT_INTEGER); return LIT_INTEGER; }
+\'[a-z]\'           { hashInsert(yytext, LIT_CHAR); return LIT_CHAR; }
+[a-z_-]+            { return TK_IDENTIFIER; }
 
-[.,;:{}()[]<>=_-]    { return yytext[0]; }
+[.,;:{}()\[\]<>=_-] { return yytext[0]; }
+\n                  { lineNumber++; }
 [ \t]
-"\n"                { lineNumber++; }
-"//".*
-"/*"                { BEGIN(COMMENT); }
-\"                  { BEGIN(STRING); }           
+\\\\.*
+[\\\*]              { BEGIN(COMMENT); }        
+\"+                 { return TOKEN_ERROR; }
 .                   { return TOKEN_ERROR; }
+                   
 
-<STRING>\"          { BEGIN(INITIAL); }
-<STRING>"\n"        { lineNumber++; return TOKEN_ERROR; }
-<STRING>.           
-<COMMENT>"*/"       { BEGIN(INITIAL); }
+<COMMENT>[\*][\\]       { BEGIN(INITIAL); }
 <COMMENT>"\n"       { lineNumber++; }
+<COMMENT><<EOF>>    { return TOKEN_ERROR; }
 <COMMENT>.          
 
 %%
-
+#include "hash.c"
+#include "main.c"
 
 int getLineNumber () {
     return lineNumber;
