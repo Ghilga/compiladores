@@ -28,6 +28,8 @@ _ide-ntificad_or-
 'identificador                             
 00312                                         
 'a'
+'.'
+';'
 "string"
 \* comenta
 rio
@@ -35,7 +37,24 @@ em
 bloco *\
 
 linha
+[
+    {
+        '('
+
+        ')'
+    }
+]
+.
+,
+;
+:
++
+-
+_
+/
+<
+>
+=
 
 \* comentario aberto
-
 .

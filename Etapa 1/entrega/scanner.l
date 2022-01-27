@@ -17,7 +17,6 @@ int running = 1;
 
 %%
 
-linha               { printf("Linha: %d\n", lineNumber); }
 char                { return KW_CHAR; }
 int                 { return KW_INT; }
 float               { return KW_FLOAT; }
@@ -35,16 +34,16 @@ return              { return KW_RETURN; }
 "=="                { return OPERATOR_EQ; }
 "!="                { return OPERATOR_DIF; }
 
+[-.,;:{}()\[\]/<>=_+] { return yytext[0]; }
 \".+\"              { hashInsert(yytext, LIT_STRING); return LIT_STRING; }
 [0-9]+              { hashInsert(yytext, LIT_INTEGER); return LIT_INTEGER; }
-\'[a-z]\'           { hashInsert(yytext, LIT_CHAR); return LIT_CHAR; }
+\'.\'               { hashInsert(yytext, LIT_CHAR); return LIT_CHAR; }
 [a-z_-]+            { return TK_IDENTIFIER; }
 
-[.,;:{}()\[\]<>=_-] { return yytext[0]; }
 \n                  { lineNumber++; }
 [ \t]
 \\\\.*
-[\\\*]              { BEGIN(COMMENT); }        
+\\\*                { BEGIN(COMMENT); }        
 \"+                 { return TOKEN_ERROR; }
 .                   { return TOKEN_ERROR; }
                    
