@@ -34,8 +34,8 @@ return              { return KW_RETURN; }
 "=="                { return OPERATOR_EQ; }
 "!="                { return OPERATOR_DIF; }
 
-[-.,;:{}()\[\]/<>=_+] { return yytext[0]; }
-\".+\"              { hashInsert(yytext, LIT_STRING); return LIT_STRING; }
+[-*.,;:{}()\[\]/<>=_+] { return yytext[0]; }
+\"([^"\n]|\\\")+\"  { hashInsert(yytext, LIT_STRING); return LIT_STRING; }
 [0-9]+              { hashInsert(yytext, LIT_INTEGER); return LIT_INTEGER; }
 \'.\'               { hashInsert(yytext, LIT_CHAR); return LIT_CHAR; }
 [a-z_-]+            { return TK_IDENTIFIER; }
@@ -45,8 +45,7 @@ return              { return KW_RETURN; }
 \\\\.*
 \\\*                { BEGIN(COMMENT); }        
 \"+                 { return TOKEN_ERROR; }
-.                   { return TOKEN_ERROR; }
-                   
+.                   { return TOKEN_ERROR; }             
 
 <COMMENT>[\*][\\]   { BEGIN(INITIAL); }
 <COMMENT>"\n"       { lineNumber++; }
