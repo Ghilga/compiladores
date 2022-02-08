@@ -13,8 +13,8 @@ extern FILE *yyin;
 FILE* initFile(char *filename) {
     FILE *inputFile;
     if ((inputFile = fopen(filename, "r")) == NULL) {
-        printf("Error opening file\n");
-        exit(1);
+        perror("Error opening file");
+        exit(2);
     }
     return inputFile;
 }
@@ -29,16 +29,15 @@ int main(int argc, char **argv) {
     initMe();
     FILE *inputFile = initFile(argv[1]);
     yyin = inputFile;
-    int token = -1;
+    int token;
 
-    while (isRunning()) {
-        token = yylex();
+    yyparse();
 
-        if (!isRunning()) {
-            break;
-        }
-        printf("Texto: %s | Token: %d\n", yytext, token);
-    }
+    // if (yyparse() == 3){
+    //     exit(3);
+    // }
+
     hashPrint();
+    printf("Success!\n");
     exit(0);
 }
