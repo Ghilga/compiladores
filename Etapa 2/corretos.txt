@@ -1,0 +1,42 @@
+int num: 10;
+char letra: 'a';
+float fracao: 3/4;
+
+int array[10];
+char array[10];
+float array[10];
+
+int array[10]: 1 2 3 4 5;
+char array[10]: 'a' 'b' 'c';
+float array[10]: 1/2 2/3 3/4 4/5 5/6;
+
+int func (){}
+char func (){}
+float func (){}
+
+int func (){
+    num = 1;
+}
+int func (){
+    num = 1
+    num = 3
+    a = 10
+    b = 'a';
+}
+int func (){
+    rotulo:
+    num = 1;
+}
+int func (int num, float numero, char caractere){
+    num = 1;
+}
+int func (int num, float numero, char caractere){
+    num = 1
+    num = 3
+    a = 10
+    b = 'a';
+}
+int func (int num, float numero, char caractere){
+    rotulo:
+    num = 1;
+}
