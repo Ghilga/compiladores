@@ -22,7 +22,11 @@
 %token LIT_CHAR          
 %token LIT_STRING        
 
-%token TOKEN_ERROR       
+%token TOKEN_ERROR      
+
+%left OPERATOR_LE OPERATOR_GE OPERATOR_EQ OPERATOR_DIF '<' '>' 
+%left '+' '-'
+%left '*' '/'
 
 %{
 
@@ -36,15 +40,15 @@ program: decl
     ;
 
 decl: 
-      dec resto
-    | decfunc restofunc
+      dec remainder
+    | decfunc remainderfunc
     ;
 
-resto: 
-      ';' dec resto
+remainder: 
+      ';' decl
     |
     ;
-restofunc: 
+remainderfunc: 
       decl
     ;
 
@@ -85,14 +89,14 @@ decfloat:
     ;
 
 array:
-      '[' LIT_INTEGER ']' ':' LIT_INTEGER arrayvalues
-    | '[' LIT_INTEGER ']' ':' LIT_CHAR arrayvalues
+      '[' LIT_INTEGER ']' ':' LIT_INTEGER array_values
+    | '[' LIT_INTEGER ']' ':' LIT_CHAR array_values
     | '[' LIT_INTEGER ']'
     ;
 
-arrayvalues: 
-      LIT_INTEGER arrayvalues
-    | LIT_CHAR arrayvalues
+array_values: 
+      LIT_INTEGER array_values
+    | LIT_CHAR array_values
     |
     ;  
 
@@ -102,16 +106,28 @@ body:
 
 lcmd: 
       cmd ';' lcmd
+    | label lcmd
     |
     ;
+
+label:
+      TK_IDENTIFIER ':'
 
 cmd: 
       TK_IDENTIFIER '=' expr
     | TK_IDENTIFIER '[' expr ']' '=' expr
     | KW_PRINT printargs
     | KW_WHILE expr body
-    | KW_IF expr
-    //TODO IF, THEN, ELSE, GOTO, RETURN
+    | KW_IF expr KW_THEN if_body
+    | KW_IF expr KW_THEN cmd
+    | KW_GOTO TK_IDENTIFIER
+    | KW_RETURN expr
+    ;
+
+if_body:
+      body KW_ELSE body
+    | body KW_ELSE cmd
+    | body
     ;
 
 expr: 

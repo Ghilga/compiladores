@@ -1,7 +1,0 @@
-int a,
-int b,
-int fun () {
-    a = 5
-    b = 777
-    x = 99 + b - (x)
-}

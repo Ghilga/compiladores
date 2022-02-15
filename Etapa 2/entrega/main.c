@@ -33,10 +33,6 @@ int main(int argc, char **argv) {
 
     yyparse();
 
-    // if (yyparse() == 3){
-    //     exit(3);
-    // }
-
     hashPrint();
     printf("Success!\n");
     exit(0);
