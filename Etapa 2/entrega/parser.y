@@ -53,9 +53,9 @@ remainderfunc:
     ;
 
 decfunc:  
-      KW_INT TK_IDENTIFIER '(' arglist ')' body
-    | KW_CHAR TK_IDENTIFIER '(' arglist ')' body
-    | KW_FLOAT TK_IDENTIFIER '(' arglist ')' body
+      KW_INT TK_IDENTIFIER '(' arglist ')' cmd
+    | KW_CHAR TK_IDENTIFIER '(' arglist ')' cmd
+    | KW_FLOAT TK_IDENTIFIER '(' arglist ')' cmd
     ;
 
 arglist: 
@@ -96,10 +96,6 @@ array_values:
       LIT_INTEGER array_values
     | LIT_CHAR array_values
     |
-    ;  
-
-body: 
-      '{' lcmd '}'
     ;
 
 lcmd: 
@@ -117,18 +113,16 @@ cmd:
     | TK_IDENTIFIER '=' expr
     | TK_IDENTIFIER '[' expr ']' '=' expr
     | KW_PRINT printargs
-    | KW_WHILE expr body
+    | KW_WHILE expr cmd
     | KW_IF expr KW_THEN if_body
-    | KW_IF expr KW_THEN cmd
     | KW_GOTO TK_IDENTIFIER
     | KW_RETURN expr
-    |
+    | 
     ;
 
 if_body:
-      body KW_ELSE body
-    | body KW_ELSE cmd
-    | body
+      cmd KW_ELSE cmd
+    | cmd
     ;
 
 expr: 
