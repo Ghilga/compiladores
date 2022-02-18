@@ -42,16 +42,15 @@ program: decl
 decl: 
       dec remainder
     | decfunc remainderfunc
+    |
     ;
 
 remainder: 
       ';' decl
-    |
     ;
 remainderfunc: 
       decl
     ;
-
 
 decfunc:  
       KW_INT TK_IDENTIFIER '(' arglist ')' body
@@ -74,7 +73,6 @@ arg:
 dec:  KW_INT TK_IDENTIFIER decintchar
     | KW_CHAR TK_IDENTIFIER decintchar
     | KW_FLOAT TK_IDENTIFIER decfloat
-    |
     ;  
 
 decintchar: 
@@ -112,9 +110,11 @@ lcmd:
 
 label:
       TK_IDENTIFIER ':'
+    ;
 
 cmd: 
-      TK_IDENTIFIER '=' expr
+      '{' lcmd '}'
+    | TK_IDENTIFIER '=' expr
     | TK_IDENTIFIER '[' expr ']' '=' expr
     | KW_PRINT printargs
     | KW_WHILE expr body
@@ -122,6 +122,7 @@ cmd:
     | KW_IF expr KW_THEN cmd
     | KW_GOTO TK_IDENTIFIER
     | KW_RETURN expr
+    |
     ;
 
 if_body:
