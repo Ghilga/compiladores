@@ -59,9 +59,14 @@ decfunc:
     ;
 
 arglist: 
-      arg ',' arglist
+      arg remainder_args
     | arg
     |
+    ;
+
+remainder_args:
+      ',' arg remainder_args
+    | ',' arg
     ;
 
 arg: 
