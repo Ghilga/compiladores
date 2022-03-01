@@ -5,11 +5,16 @@
 		},
 		{
 			"path": "Etapa 2"
+		},
+		{
+			"path": "Etapa 3"
 		}
 	],
 	"settings": {
 		"files.associations": {
-			"*.l": "lex"
+			"*.l": "lex",
+			"stdio.h": "c",
+			"hash.h": "c"
 		}
 	}
 }
