@@ -38,7 +38,7 @@ void astPrint(AST *node, int level){
         case AST_DEC: fprintf(stderr, "AST_DEC"); break;
         case AST_DECL: fprintf(stderr, "AST_DECL"); break;
         case AST_DECFUNC: fprintf(stderr, "AST_DECFUNC"); break;
-        case AST_DECINTCHAR: fprintf(stderr, "AST_DECINTCHAR"); break;
+        case AST_DECINT: fprintf(stderr, "AST_DECINT"); break;
         default: fprintf(stderr, "AST_UNKNOWN"); break;
     }
     if (node->symbol != 0)

@@ -70,7 +70,7 @@
 
 %%
 
-program: decl {fullAstTree = $1;}
+program: decl { fullAst = $1; }
     ;
 
 decl: 
@@ -110,8 +110,8 @@ arg:
     | KW_FLOAT TK_IDENTIFIER    { $$ = astCreateSymbol($2); }
     ;
 
-dec:  KW_INT TK_IDENTIFIER decintchar     { $$ = astCreate(AST_DECINTCHAR,$2,$3,0,0,0); }
-    | KW_CHAR TK_IDENTIFIER decintchar    { $$ = astCreate(AST_DECINTCHAR,$2,$3,0,0,0); }
+dec:  KW_INT TK_IDENTIFIER decintchar     { $$ = astCreate(AST_DECINT,$2,$3,0,0,0); }
+    | KW_CHAR TK_IDENTIFIER decintchar    { $$ = astCreate(AST_DECCHAR,$2,$3,0,0,0); }
     | KW_FLOAT TK_IDENTIFIER decfloat     { $$ = astCreate(AST_DECFLOAT,$2,$3,0,0,0); }
     ;  
 
@@ -122,19 +122,19 @@ decintchar:
     ;
 
 decfloat: 
-      ':' LIT_INTEGER '/' LIT_INTEGER   { $$ = astCreate(AST_FLOAT,astCreateSymbol($2),astCreateSymbol($4),0,0,0); }
+      ':' LIT_INTEGER '/' LIT_INTEGER   { $$ = astCreate(AST_FLOAT,0,astCreateSymbol($2),astCreateSymbol($4),0,0); }
     | array                             { $$ = $1; }
     ;
 
 array:
       '[' LIT_INTEGER ']' ':' LIT_INTEGER array_values    { $$ = astCreate(AST_ARRAY,$2,astCreateSymbol($5),$6,0,0); } 
     | '[' LIT_INTEGER ']' ':' LIT_CHAR array_values       { $$ = astCreate(AST_ARRAY,$2,astCreateSymbol($5),$6,0,0); }
-    | '[' LIT_INTEGER ']'                                 { $$ = $2; }
+    | '[' LIT_INTEGER ']'                                 { $$ = astCreateSymbol($2); }
     ;
 
 array_values: 
-      LIT_INTEGER array_values    { $$ = astCreate(AST_ARR_VALUES,$1,astCreateSymbol($2),0,0,0); }
-    | LIT_CHAR array_values       { $$ = astCreate(AST_ARR_VALUES,$1,astCreateSymbol($2),0,0,0); }
+      LIT_INTEGER array_values    { $$ = astCreate(AST_ARR_VALUES,$1,$2,0,0,0); }
+    | LIT_CHAR array_values       { $$ = astCreate(AST_ARR_VALUES,$1,$2,0,0,0); }
     |                             { $$ = 0; }
     ;
 
@@ -182,7 +182,7 @@ expr:
     | expr OPERATOR_EQ expr           { $$ = astCreate(AST_EQ,0,$1,$3,0,0); }
     | expr OPERATOR_GE expr           { $$ = astCreate(AST_GE,0,$1,$3,0,0); }
     | expr OPERATOR_LE expr           { $$ = astCreate(AST_LE,0,$1,$3,0,0); }
-    | '(' expr ')'                    {$$ = $2;}        
+    | '(' expr ')'                    { $$ = $2; }        
     ;
 
 exprlist:

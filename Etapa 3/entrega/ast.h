@@ -5,6 +5,8 @@
 
 #define MAX_SONS 4
 
+#include "hash.h"
+
 enum{
     AST_SYMBOL = 1,
     AST_ADD,
@@ -15,19 +17,33 @@ enum{
     AST_DEC,
     AST_DECL,
     AST_DECFUNC,
-    AST_DECINTCHAR,
+    AST_DECINT,
+    AST_DECCHAR,
     AST_PRINT,
     AST_WHILE,
     AST_IF,
     AST_GOTO,
     AST_RETURN,
     AST_ELSE,
-    AST_ARR_ELEMENT
-}
+    AST_ARR_ELEMENT,
+    AST_ARGLIST,
+    AST_DECFLOAT,
+    AST_FLOAT,
+    AST_ARRAY,
+    AST_ARR_VALUES,
+    AST_FUNC_CALL,
+    AST_MUL,
+    AST_DIV,
+    AST_LESS,
+    AST_GREATER,
+    AST_DIF,
+    AST_EQ,
+    AST_GE,
+    AST_LE,
+    AST_EXPR_LIST,
+    AST_PRINTARGS
+};
 
-
-
-#include "hash.h"
 
 typedef struct astnode
 {
