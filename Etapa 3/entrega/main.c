@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "hash.h"
+#include "ast.h"
 
 
 extern int isRunning();
@@ -12,6 +13,7 @@ extern void hashPrint();
 extern int yyparse();
 extern char *yytext;
 extern FILE *yyin;
+extern AST *fullAst;
 
 FILE* initFile(char *filename) {
     FILE *inputFile;
@@ -37,6 +39,7 @@ int main(int argc, char **argv) {
     yyparse();
 
     hashPrint();
+    astPrint(fullAst,0);
     printf("Success!\n");
     exit(0);
 }

@@ -21,5 +21,8 @@ y.tab.c: parser.y
 lex.yy.c: scanner.l 
 	lex scanner.l 
 
+entrega:
+	tar cvzf etapa3.tgz .
+
 clean: 
-	rm -f etapa3 lex.yy.c y.tab.c y.tab.h *.o
+	rm -f etapa3 lex.yy.c y.tab.c y.tab.h etapa3.tgz *.o

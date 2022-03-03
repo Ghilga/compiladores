@@ -5,6 +5,7 @@
   int getLineNumber();
   int yyerror();
   int yylex();
+  AST *fullAst;
 
 %}
 
@@ -33,9 +34,9 @@
 
 %token<symbol> TK_IDENTIFIER     
 
-%token<symbol> LIT_INTEGER       
-%token LIT_CHAR          
-%token LIT_STRING        
+%token<symbol> LIT_INTEGER   
+%token<symbol> LIT_CHAR          
+%token<symbol> LIT_STRING        
 
 %token TOKEN_ERROR     
 
@@ -49,136 +50,154 @@
 %type<ast> cmd
 %type<ast> if_body
 %type<ast> decl
+%type<ast> array
 %type<ast> array_values
+%type<ast> label
+%type<ast> program
+%type<ast> dec
+%type<ast> remainder
+%type<ast> remainderfunc
+%type<ast> decfunc
+%type<ast> arglist
+%type<ast> remainder_args
+%type<ast> arg
+%type<ast> decintchar
+%type<ast> decfloat
+%type<ast> exprlist
+%type<ast> printarg
+%type<ast> printargs
+
+
 %%
 
-program: decl
+program: decl {fullAstTree = $1;}
     ;
 
 decl: 
-      dec remainder
-    | decfunc remainderfunc
+      dec remainder             { $$ = astCreate(AST_DECL,0,$1,$2,0,0);}
+    | decfunc remainderfunc     { $$ = astCreate(AST_DECL,0,$1,$2,0,0);}
     |                           { $$ = 0; }
     ;
 
 remainder: 
-      ';' decl
+      ';' decl      { $$ = $2; }
     ;
+
 remainderfunc: 
-      decl
+      decl          { $$ = $1; }
     ;
 
 decfunc:  
-      KW_INT TK_IDENTIFIER '(' arglist ')' cmd
-    | KW_CHAR TK_IDENTIFIER '(' arglist ')' cmd
-    | KW_FLOAT TK_IDENTIFIER '(' arglist ')' cmd
+      KW_INT TK_IDENTIFIER '(' arglist ')' cmd      { $$ = astCreate(AST_DECFUNC,$2,$4,$6,0,0); }
+    | KW_CHAR TK_IDENTIFIER '(' arglist ')' cmd     { $$ = astCreate(AST_DECFUNC,$2,$4,$6,0,0); }
+    | KW_FLOAT TK_IDENTIFIER '(' arglist ')' cmd    { $$ = astCreate(AST_DECFUNC,$2,$4,$6,0,0); }
     ;
 
 arglist: 
-      arg remainder_args
-    | arg
-    |
-    ;
-
-remainder_args:
-      ',' arg remainder_args
-    | ',' arg
-    ;
-
-arg: 
-      KW_INT TK_IDENTIFIER
-    | KW_CHAR TK_IDENTIFIER
-    | KW_FLOAT TK_IDENTIFIER
-    ;
-
-dec:  KW_INT TK_IDENTIFIER decintchar
-    | KW_CHAR TK_IDENTIFIER decintchar
-    | KW_FLOAT TK_IDENTIFIER decfloat
-    ;  
-
-decintchar: 
-      ':' LIT_INTEGER {}
-    | ':' LIT_CHAR
-    | array
-    ;
-
-decfloat: 
-      ':' LIT_INTEGER '/' LIT_INTEGER
-    | array
-    ;
-
-array:
-      '[' LIT_INTEGER ']' ':' LIT_INTEGER array_values
-    | '[' LIT_INTEGER ']' ':' LIT_CHAR array_values
-    | '[' LIT_INTEGER ']'
-    ;
-
-array_values: 
-      LIT_INTEGER array_values
-    | LIT_CHAR array_values
+      arg remainder_args  { $$ = astCreate(AST_ARGLIST,0,$1,$2,0,0); }
+    | arg                 { $$ = $1; }
     |                     { $$ = 0; }
     ;
 
+remainder_args:
+      ',' arg remainder_args    { $$ = astCreate(AST_ARGLIST,0,$2,$3,0,0); }
+    | ',' arg                   { $$ = $2; }
+    ;
+
+arg: 
+      KW_INT TK_IDENTIFIER      { $$ = astCreateSymbol($2); }
+    | KW_CHAR TK_IDENTIFIER     { $$ = astCreateSymbol($2); }
+    | KW_FLOAT TK_IDENTIFIER    { $$ = astCreateSymbol($2); }
+    ;
+
+dec:  KW_INT TK_IDENTIFIER decintchar     { $$ = astCreate(AST_DECINTCHAR,$2,$3,0,0,0); }
+    | KW_CHAR TK_IDENTIFIER decintchar    { $$ = astCreate(AST_DECINTCHAR,$2,$3,0,0,0); }
+    | KW_FLOAT TK_IDENTIFIER decfloat     { $$ = astCreate(AST_DECFLOAT,$2,$3,0,0,0); }
+    ;  
+
+decintchar: 
+      ':' LIT_INTEGER     { $$ = astCreateSymbol($2); }
+    | ':' LIT_CHAR        { $$ = astCreateSymbol($2); }
+    | array               { $$ = $1; }
+    ;
+
+decfloat: 
+      ':' LIT_INTEGER '/' LIT_INTEGER   { $$ = astCreate(AST_FLOAT,astCreateSymbol($2),astCreateSymbol($4),0,0,0); }
+    | array                             { $$ = $1; }
+    ;
+
+array:
+      '[' LIT_INTEGER ']' ':' LIT_INTEGER array_values    { $$ = astCreate(AST_ARRAY,$2,astCreateSymbol($5),$6,0,0); } 
+    | '[' LIT_INTEGER ']' ':' LIT_CHAR array_values       { $$ = astCreate(AST_ARRAY,$2,astCreateSymbol($5),$6,0,0); }
+    | '[' LIT_INTEGER ']'                                 { $$ = $2; }
+    ;
+
+array_values: 
+      LIT_INTEGER array_values    { $$ = astCreate(AST_ARR_VALUES,$1,astCreateSymbol($2),0,0,0); }
+    | LIT_CHAR array_values       { $$ = astCreate(AST_ARR_VALUES,$1,astCreateSymbol($2),0,0,0); }
+    |                             { $$ = 0; }
+    ;
+
 label:
-      TK_IDENTIFIER ':'
+      TK_IDENTIFIER ':' { $$ = astCreateSymbol($1); }
     ;
 
 lcmd: 
       cmd ';' lcmd    { $$ = astCreate(AST_LCMD,0,$1,$3,0,0); }
-    | label lcmd
+    | label lcmd      { $$ = astCreate(AST_LABEL,0,$1,$2,0,0);}
     |                 { $$ = 0; }
     ;
 
 cmd: 
-      '{' lcmd '}'
-    | TK_IDENTIFIER '=' expr    { astPrint($3, 0); }
-    | TK_IDENTIFIER '[' expr ']' '=' expr
-    | KW_PRINT printargs
-    | KW_WHILE expr cmd
-    | KW_IF expr KW_THEN cmd if_body
-    | KW_GOTO TK_IDENTIFIER
-    | KW_RETURN expr
-    |                           { $$ = 0; }
+      '{' lcmd '}'                          { $$ = $2; }
+    | TK_IDENTIFIER '=' expr                { $$ = astCreate(AST_ATTR,$1,$3,0,0,0); }
+    | TK_IDENTIFIER '[' expr ']' '=' expr   { $$ = astCreate(AST_ATTR,$1,$3,$6,0,0); }
+    | KW_PRINT printargs                    { $$ = astCreate(AST_PRINT,0,$2,0,0,0); }
+    | KW_WHILE expr cmd                     { $$ = astCreate(AST_WHILE,0,$2,$3,0,0); }
+    | KW_IF expr KW_THEN cmd if_body        { $$ = astCreate(AST_IF,0,$2,$4,$5,0); }
+    | KW_GOTO TK_IDENTIFIER                 { $$ = astCreate(AST_GOTO,0,astCreateSymbol($2),0,0,0); }
+    | KW_RETURN expr                        { $$ = astCreate(AST_RETURN,0,$2,0,0,0); }
+    |                                       { $$ = 0; }
     ;
 
 if_body:
-      KW_ELSE cmd
-    |                           { $$ = 0; }
+      KW_ELSE cmd   { $$ = astCreate(AST_ELSE,0,$2,0,0,0); }
+    |               { $$ = 0; }
     ; 
 
 expr: 
-      LIT_INTEGER       {$$ = astCreate(AST_SYMBOL,$1,0,0,0,0);}
-    | LIT_CHAR          
-    | TK_IDENTIFIER '[' expr ']' 
-    | TK_IDENTIFIER '(' exprlist')' 
-    | TK_IDENTIFIER     {$$ = astCreate(AST_SYMBOL,$1,0,0,0,0);}        
-    | KW_READ                   
-    | expr '+' expr     {$$ = astCreate(AST_ADD,0,$1,$3,0,0);}      
-    | expr '-' expr     {$$ = astCreate(AST_SUB,0,$1,$3,0,0);}        
-    | expr '*' expr             
-    | expr '/' expr             
-    | expr '<' expr             
-    | expr '>' expr            
-    | expr OPERATOR_DIF expr
-    | expr OPERATOR_EQ expr
-    | expr OPERATOR_GE expr
-    | expr OPERATOR_LE expr
-    | '(' expr ')'      {$$ = $2;}        
+      LIT_INTEGER                     { $$ = astCreateSymbol($1); }
+    | LIT_CHAR                        { $$ = astCreateSymbol($1); }
+    | TK_IDENTIFIER '[' expr ']'      { $$ = astCreate(AST_ARR_ELEMENT,$1,$3,0,0,0); }
+    | TK_IDENTIFIER '(' exprlist')'   { $$ = astCreate(AST_FUNC_CALL,$1,$3,0,0,0); } 
+    | TK_IDENTIFIER                   { $$ = astCreateSymbol($1); }        
+    | KW_READ                         { $$ = 0; }
+    | expr '+' expr                   { $$ = astCreate(AST_ADD,0,$1,$3,0,0); }      
+    | expr '-' expr                   { $$ = astCreate(AST_SUB,0,$1,$3,0,0); }        
+    | expr '*' expr                   { $$ = astCreate(AST_MUL,0,$1,$3,0,0); }
+    | expr '/' expr                   { $$ = astCreate(AST_DIV,0,$1,$3,0,0); }
+    | expr '<' expr                   { $$ = astCreate(AST_LESS,0,$1,$3,0,0); }
+    | expr '>' expr                   { $$ = astCreate(AST_GREATER,0,$1,$3,0,0); }
+    | expr OPERATOR_DIF expr          { $$ = astCreate(AST_DIF,0,$1,$3,0,0); }
+    | expr OPERATOR_EQ expr           { $$ = astCreate(AST_EQ,0,$1,$3,0,0); }
+    | expr OPERATOR_GE expr           { $$ = astCreate(AST_GE,0,$1,$3,0,0); }
+    | expr OPERATOR_LE expr           { $$ = astCreate(AST_LE,0,$1,$3,0,0); }
+    | '(' expr ')'                    {$$ = $2;}        
     ;
 
 exprlist:
-      expr ',' exprlist
-    | expr
+      expr ',' exprlist     { $$ = astCreate(AST_EXPR_LIST,0,$1,$3,0,0); }
+    | expr                  { $$ = $1; }
     ;
 
 printargs:
-      printarg ',' printargs
-    | printarg
+      printarg ',' printargs    { $$ = astCreate(AST_PRINTARGS,0,$1,$3,0,0); }
+    | printarg                  { $$ = $1; }
     ;
 
 printarg:
-      LIT_STRING
-    | expr
+      LIT_STRING    { $$ = astCreateSymbol($1); }
+    | expr          { $$ = $1; }
     ;
 %%
 

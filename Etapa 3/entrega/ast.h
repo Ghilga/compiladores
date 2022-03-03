@@ -5,10 +5,27 @@
 
 #define MAX_SONS 4
 
-#define AST_SYMBOL 1 
-#define AST_ADD 2
-#define AST_SUB 3
-#define AST_LCMD 4 
+enum{
+    AST_SYMBOL = 1,
+    AST_ADD,
+    AST_SUB,
+    AST_LCMD,
+    AST_ATTR,
+    AST_LABEL,
+    AST_DEC,
+    AST_DECL,
+    AST_DECFUNC,
+    AST_DECINTCHAR,
+    AST_PRINT,
+    AST_WHILE,
+    AST_IF,
+    AST_GOTO,
+    AST_RETURN,
+    AST_ELSE,
+    AST_ARR_ELEMENT
+}
+
+
 
 #include "hash.h"
 
@@ -20,6 +37,7 @@ typedef struct astnode
 }AST;
 
 AST *astCreate(int type, HASH_NODE *symbol, AST *s0, AST *s1, AST *s2, AST *s3);
+AST *astCreateSymbol(HASH_NODE *symbol);
 void astPrint(AST *node, int level);
 void printSpaces(int numSpaces);
 
