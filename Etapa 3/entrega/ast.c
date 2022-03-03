@@ -39,6 +39,32 @@ void astPrint(AST *node, int level){
         case AST_DECL: fprintf(stderr, "AST_DECL"); break;
         case AST_DECFUNC: fprintf(stderr, "AST_DECFUNC"); break;
         case AST_DECINT: fprintf(stderr, "AST_DECINT"); break;
+        case AST_DECCHAR: fprintf(stderr, "AST_DECCHAR"); break;
+        case AST_PRINT: fprintf(stderr, "AST_PRINT"); break;
+        case AST_WHILE: fprintf(stderr, "AST_WHILE"); break;
+        case AST_IF: fprintf(stderr, "AST_IF"); break;
+        case AST_GOTO: fprintf(stderr, "AST_GOTO"); break;
+        case AST_RETURN: fprintf(stderr, "AST_RETURN"); break;
+        case AST_ELSE: fprintf(stderr, "AST_ELSE"); break;
+        case AST_ARR_ELEMENT: fprintf(stderr, "AST_ARR_ELEMENT"); break;
+        case AST_ARGLIST: fprintf(stderr, "AST_ARGLIST"); break;
+        case AST_DECFLOAT: fprintf(stderr, "AST_DECFLOAT"); break;
+        case AST_FLOAT: fprintf(stderr, "AST_FLOAT"); break;
+        case AST_ARRAY: fprintf(stderr, "AST_ARRAY"); break;
+        case AST_ARR_VALUES: fprintf(stderr, "AST_ARR_VALUES"); break;
+        case AST_FUNC_CALL: fprintf(stderr, "AST_FUNC_CALL"); break;
+        case AST_MUL: fprintf(stderr, "AST_MUL"); break;
+        case AST_DIV: fprintf(stderr, "AST_DIV"); break;
+        case AST_LESS: fprintf(stderr, "AST_LESS"); break;
+        case AST_GREATER: fprintf(stderr, "AST_GREATER"); break;
+        case AST_DIF: fprintf(stderr, "AST_DIF"); break;
+        case AST_EQ: fprintf(stderr, "AST_EQ"); break;
+        case AST_GE: fprintf(stderr, "AST_GE"); break;
+        case AST_LE: fprintf(stderr, "AST_LE"); break;
+        case AST_EXPR_LIST: fprintf(stderr, "AST_EXPR_LIST"); break;
+        case AST_PRINTARGS: fprintf(stderr, "AST_PRINTARGS"); break;
+
+        
         default: fprintf(stderr, "AST_UNKNOWN"); break;
     }
     if (node->symbol != 0)
