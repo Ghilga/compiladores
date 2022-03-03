@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "hash.h"
 #include "ast.h"
+#include "decompiler.h"
 
 
 extern int isRunning();
@@ -15,9 +16,9 @@ extern char *yytext;
 extern FILE *yyin;
 extern AST *fullAst;
 
-FILE* initFile(char *filename) {
+FILE* initFile(char *filename, char *modes) {
     FILE *inputFile;
-    if ((inputFile = fopen(filename, "r")) == NULL) {
+    if ((inputFile = fopen(filename, modes)) == NULL) {
         perror("Error opening file");
         exit(2);
     }
@@ -25,21 +26,21 @@ FILE* initFile(char *filename) {
 }
 
 int main(int argc, char **argv) {
-    
-    if (argc < 2) {
-        printf("Call program with 'filename.txt'\n");
+    if (argc < 3) {
+        printf("Call program with 'input.txt output.txt'\n");
         exit(1);
     }
 
     initMe();
-    FILE *inputFile = initFile(argv[1]);
+    FILE *inputFile = initFile(argv[1], "r");
+    FILE *outputFile = initFile(argv[2], "w");
     yyin = inputFile;
-    int token;
 
     yyparse();
 
     hashPrint();
     astPrint(fullAst,0);
+    decompile(fullAst, outputFile);
     printf("Success!\n");
     exit(0);
 }

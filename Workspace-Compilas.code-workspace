@@ -14,7 +14,8 @@
 		"files.associations": {
 			"*.l": "lex",
 			"stdio.h": "c",
-			"hash.h": "c"
+			"hash.h": "c",
+			"ast.h": "c"
 		}
 	}
 }

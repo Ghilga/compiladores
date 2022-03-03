@@ -1,8 +1,15 @@
 int a: 10;
-int b: 5;
+char b: 5;
+float c: 4/2;
 
-\*int main(){
+int a[3]: 2 3 4;
+
+int main(int a, char b, float c){
+    print "testando", "teste2", "teste3";
+    
+    x = x + 10;
+    x = a;
     a = 4;
     b = 10;
-    x = 100 + b - (x) + 20;
-}*\
+    \\x = 100 + b - (x) + 20;
+}

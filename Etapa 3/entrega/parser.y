@@ -88,26 +88,25 @@ remainderfunc:
     ;
 
 decfunc:  
-      KW_INT TK_IDENTIFIER '(' arglist ')' cmd      { $$ = astCreate(AST_DECFUNC,$2,$4,$6,0,0); }
-    | KW_CHAR TK_IDENTIFIER '(' arglist ')' cmd     { $$ = astCreate(AST_DECFUNC,$2,$4,$6,0,0); }
-    | KW_FLOAT TK_IDENTIFIER '(' arglist ')' cmd    { $$ = astCreate(AST_DECFUNC,$2,$4,$6,0,0); }
+      KW_INT TK_IDENTIFIER '(' arglist ')' cmd      { $$ = astCreate(AST_DEC_INTFUNC,$2,$4,$6,0,0); }
+    | KW_CHAR TK_IDENTIFIER '(' arglist ')' cmd     { $$ = astCreate(AST_DEC_CHARFUNC,$2,$4,$6,0,0); }
+    | KW_FLOAT TK_IDENTIFIER '(' arglist ')' cmd    { $$ = astCreate(AST_DEC_FLOATFUNC,$2,$4,$6,0,0); }
     ;
 
 arglist: 
       arg remainder_args  { $$ = astCreate(AST_ARGLIST,0,$1,$2,0,0); }
-    | arg                 { $$ = $1; }
     |                     { $$ = 0; }
     ;
 
 remainder_args:
       ',' arg remainder_args    { $$ = astCreate(AST_ARGLIST,0,$2,$3,0,0); }
-    | ',' arg                   { $$ = $2; }
+    |                           { $$ = 0; }
     ;
 
 arg: 
-      KW_INT TK_IDENTIFIER      { $$ = astCreateSymbol($2); }
-    | KW_CHAR TK_IDENTIFIER     { $$ = astCreateSymbol($2); }
-    | KW_FLOAT TK_IDENTIFIER    { $$ = astCreateSymbol($2); }
+      KW_INT TK_IDENTIFIER      { $$ = astCreate(AST_ARGINT,$2,0,0,0,0); }
+    | KW_CHAR TK_IDENTIFIER     { $$ = astCreate(AST_ARGCHAR,$2,0,0,0,0); }
+    | KW_FLOAT TK_IDENTIFIER    { $$ = astCreate(AST_ARGFLOAT,$2,0,0,0,0); }
     ;
 
 dec:  KW_INT TK_IDENTIFIER decintchar     { $$ = astCreate(AST_DECINT,$2,$3,0,0,0); }
@@ -144,12 +143,12 @@ label:
 
 lcmd: 
       cmd ';' lcmd    { $$ = astCreate(AST_LCMD,0,$1,$3,0,0); }
-    | label lcmd      { $$ = astCreate(AST_LABEL,0,$1,$2,0,0);}
+    | label lcmd      { $$ = astCreate(AST_LABEL,0,$1,$2,0,0); }
     |                 { $$ = 0; }
     ;
 
 cmd: 
-      '{' lcmd '}'                          { $$ = $2; }
+      '{' lcmd '}'                          { $$ = astCreate(AST_CMD,0,$2,0,0,0);; }
     | TK_IDENTIFIER '=' expr                { $$ = astCreate(AST_ATTR,$1,$3,0,0,0); }
     | TK_IDENTIFIER '[' expr ']' '=' expr   { $$ = astCreate(AST_ATTR,$1,$3,$6,0,0); }
     | KW_PRINT printargs                    { $$ = astCreate(AST_PRINT,0,$2,0,0,0); }

@@ -32,12 +32,14 @@ void astPrint(AST *node, int level){
         case AST_SYMBOL: fprintf(stderr, "AST_SYMBOL"); break;
         case AST_ADD: fprintf(stderr, "AST_ADD"); break;
         case AST_SUB: fprintf(stderr, "AST_SUB"); break;
+        case AST_CMD: fprintf(stderr, "AST_CMD"); break;
         case AST_LCMD: fprintf(stderr, "AST_LCMD"); break;
         case AST_ATTR: fprintf(stderr, "AST_ATTR"); break;
         case AST_LABEL: fprintf(stderr, "AST_LABEL"); break;
-        case AST_DEC: fprintf(stderr, "AST_DEC"); break;
         case AST_DECL: fprintf(stderr, "AST_DECL"); break;
-        case AST_DECFUNC: fprintf(stderr, "AST_DECFUNC"); break;
+        case AST_DEC_INTFUNC: fprintf(stderr, "AST_DEC_INTFUNC"); break;
+        case AST_DEC_CHARFUNC: fprintf(stderr, "AST_DEC_CHARFUNC"); break;
+        case AST_DEC_FLOATFUNC: fprintf(stderr, "AST_DEC_FLOATFUNC"); break;
         case AST_DECINT: fprintf(stderr, "AST_DECINT"); break;
         case AST_DECCHAR: fprintf(stderr, "AST_DECCHAR"); break;
         case AST_PRINT: fprintf(stderr, "AST_PRINT"); break;
@@ -48,6 +50,9 @@ void astPrint(AST *node, int level){
         case AST_ELSE: fprintf(stderr, "AST_ELSE"); break;
         case AST_ARR_ELEMENT: fprintf(stderr, "AST_ARR_ELEMENT"); break;
         case AST_ARGLIST: fprintf(stderr, "AST_ARGLIST"); break;
+        case AST_ARGINT: fprintf(stderr, "AST_ARGINT"); break;
+        case AST_ARGCHAR: fprintf(stderr, "AST_ARGCHAR"); break;
+        case AST_ARGFLOAT: fprintf(stderr, "AST_ARGFLOAT"); break;
         case AST_DECFLOAT: fprintf(stderr, "AST_DECFLOAT"); break;
         case AST_FLOAT: fprintf(stderr, "AST_FLOAT"); break;
         case AST_ARRAY: fprintf(stderr, "AST_ARRAY"); break;
