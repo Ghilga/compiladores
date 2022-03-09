@@ -5,7 +5,6 @@ float c: 4/2;
 int a[3]: 2 3 4;
 
 int main(int a, char b, float c){
-    print "testando", "teste2", "teste3";
     label:
     {
         x = x + 10 - 2 + 4/2;
@@ -27,4 +26,6 @@ int main(int a, char b, float c){
     goto label-x;
     return x+n;
     \\x = 100 + b - (x) + 20;
+    print v[5];
+    print "testando", "teste2", "teste3";
 }

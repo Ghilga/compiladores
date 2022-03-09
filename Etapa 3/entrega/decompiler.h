@@ -9,5 +9,4 @@ void decompileDecFunc(AST *node);
 void decompileArgList(AST *node);
 void decompileCmd(AST *node);
 void decompileExpr(AST *node);
-void decompileCompareAndArithmetic(AST *node, char* text);
-void decompilePrintArgs(AST *node);
+void decompileListExpr(AST *node, char* text);
