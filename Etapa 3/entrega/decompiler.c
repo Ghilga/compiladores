@@ -62,7 +62,7 @@ void decompileDecIntChar(AST *node){
 
 void decompileDecFloat(AST *node){
     char *values[2] = { node->son[0]->son[0]->symbol->text, node->son[0]->son[1]->symbol->text };
-    fprintf(output, "float %s: %s/%s", node->symbol->text, values[0], values[1]);
+    fprintf(output, " %s: %s/%s", node->symbol->text, values[0], values[1]);
 }
 
 void decompileArray(AST *node){
@@ -122,61 +122,109 @@ void decompileCmd(AST *node){
             fprintf(output,"%s =", node->symbol->text);
             decompileExpr(node->son[0]);
             break;
+        case AST_ARR_ATTR: 
+            fprintf(output,"%s[", node->symbol->text);
+            decompileExpr(node->son[0]);
+            fprintf(output,"] =");
+            decompileExpr(node->son[1]);
+            break;
         case AST_PRINT:
             fprintf(output,"print");
-            decompilePrintArgs(node->son[0]);
+            decompileExpr(node->son[0]);
             break;
         case AST_WHILE: 
             fprintf(output,"while");
             decompileExpr(node->son[0]);
             decompileCmd(node->son[1]);
             break;
-        case AST_IF: break;
-        case AST_GOTO: break;
-        case AST_RETURN: break;
+        case AST_IF:
+            fprintf(output,"if");
+            decompileExpr(node->son[0]);
+            fprintf(output," then\n");
+            decompileCmd(node->son[1]);
+            if (node->son[2] != 0)
+                decompileCmd(node->son[2]);
+            break;
+        case AST_ELSE:
+            fprintf(output," else\n");
+            decompileCmd(node->son[0]);
+            break;
+        case AST_GOTO: 
+            fprintf(output,"goto %s", node->son[0]->symbol->text);
+            break;
+        case AST_RETURN: 
+            fprintf(output,"return");
+            decompileExpr(node->son[0]);
+            break;
     }
 }
 
 void decompileExpr(AST *node){
+    if (node == 0)
+        return;
+
     switch (node->type){
-        case AST_ARR_ELEMENT: break;
-        case AST_FUNC_CALL: break;
-        case AST_ADD: 
+        case AST_ARR_ELEMENT:
+            fprintf(output," %s[",node->symbol->text);
             decompileExpr(node->son[0]);
-            fprintf(output," +");
-            decompileExpr(node->son[1]);
+            fprintf(output,"]");
+            break;
+        case AST_FUNC_CALL:
+            fprintf(output," %s(",node->symbol->text);
+            decompileExpr(node->son[0]);
+            fprintf(output,")");
+            break;
+        case AST_EXPR_LIST:
+            decompileExpr(node->son[0]);
+            if(node->son[1] != 0){
+                fprintf(output,",");
+                decompileExpr(node->son[1]);
+            }
+            break;
+        case AST_READ: 
+            fprintf(output,"read");
+            break;
+        case AST_PRINTARGS:
+            decompileListExpr(node,",");
+            break;
+        case AST_ADD: 
+            decompileListExpr(node,"+");
             break;
         case AST_SUB:
-            decompileExpr(node->son[0]);
-            fprintf(output," -");
-            decompileExpr(node->son[1]);
+            decompileListExpr(node,"-");
             break;
-        case AST_MUL: break;
-        case AST_DIV: break;
-        case AST_LESS: break;
-        case AST_GREATER: break;
-        case AST_DIF: break;
-        case AST_EQ: break;
-        case AST_GE: break;
-        case AST_LE: break;
+        case AST_MUL:
+            decompileListExpr(node,"*");
+            break;
+        case AST_DIV:
+            decompileListExpr(node,"/");
+            break;
+        case AST_LESS:
+            decompileListExpr(node,"<");
+            break;
+        case AST_GREATER:
+            decompileListExpr(node,">");
+            break;
+        case AST_DIF:
+            decompileListExpr(node,"!=");
+            break;
+        case AST_EQ:
+            decompileListExpr(node,"==");
+            break;
+        case AST_GE:
+            decompileListExpr(node,">=");
+            break;
+        case AST_LE:
+            decompileListExpr(node,"<=");
+            break;
         case AST_SYMBOL:
             fprintf(output, " %s", node->symbol->text);
             break;
     }
 }
 
-void decompilePrintArgs(AST *node){
-    if (node == 0)
-        return;
-    if (node->type == AST_SYMBOL)
-        fprintf(output," %s", node->symbol->text);
-    else{
-        decompilePrintArgs(node->son[0]);
-        fprintf(output,",");
-        decompilePrintArgs(node->son[1]);
-    }
-}
-
-void decompileCompareAndArithmetic(AST *node, char* text){
-    //fprintf(output," ",);
+void decompileListExpr(AST *node, char* text){
+    decompileExpr(node->son[0]);
+    fprintf(output," %s", text);
+    decompileExpr(node->son[1]);
 }

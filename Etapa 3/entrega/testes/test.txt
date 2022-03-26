@@ -5,11 +5,27 @@ float c: 4/2;
 int a[3]: 2 3 4;
 
 int main(int a, char b, float c){
-    print "testando", "teste2", "teste3";
-    
-    x = x + 10;
-    x = a;
-    a = 4;
-    b = 10;
+    label:
+    {
+        x = x + 10 - 2 + 4/2;
+    };
+    while i<10
+    {
+        i = incn(i,1);
+        a = incn(a,1);
+    };
+    arr[4] = 10;
+    a = main(x);
+    x[1] = aux;
+    c = 4;
+    if (i==100) then {
+        print "Nao tem como isso...\n";
+    } 
+    else
+        print "OK!\n";
+    goto label-x;
+    return x+n;
     \\x = 100 + b - (x) + 20;
+    print v[5];
+    print "testando", "teste2", "teste3";
 }

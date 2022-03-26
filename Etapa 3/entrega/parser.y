@@ -55,8 +55,6 @@
 %type<ast> label
 %type<ast> program
 %type<ast> dec
-%type<ast> remainder
-%type<ast> remainderfunc
 %type<ast> decfunc
 %type<ast> arglist
 %type<ast> remainder_args
@@ -74,17 +72,9 @@ program: decl { fullAst = $1; }
     ;
 
 decl: 
-      dec remainder             { $$ = astCreate(AST_DECL,0,$1,$2,0,0);}
-    | decfunc remainderfunc     { $$ = astCreate(AST_DECL,0,$1,$2,0,0);}
-    |                           { $$ = 0; }
-    ;
-
-remainder: 
-      ';' decl      { $$ = $2; }
-    ;
-
-remainderfunc: 
-      decl          { $$ = $1; }
+      dec ';' decl     { $$ = astCreate(AST_DECL,0,$1,$3,0,0);}
+    | decfunc decl     { $$ = astCreate(AST_DECL,0,$1,$2,0,0);}
+    |                  { $$ = 0; }
     ;
 
 decfunc:  
@@ -150,7 +140,7 @@ lcmd:
 cmd: 
       '{' lcmd '}'                          { $$ = astCreate(AST_CMD,0,$2,0,0,0);; }
     | TK_IDENTIFIER '=' expr                { $$ = astCreate(AST_ATTR,$1,$3,0,0,0); }
-    | TK_IDENTIFIER '[' expr ']' '=' expr   { $$ = astCreate(AST_ATTR,$1,$3,$6,0,0); }
+    | TK_IDENTIFIER '[' expr ']' '=' expr   { $$ = astCreate(AST_ARR_ATTR,$1,$3,$6,0,0); }
     | KW_PRINT printargs                    { $$ = astCreate(AST_PRINT,0,$2,0,0,0); }
     | KW_WHILE expr cmd                     { $$ = astCreate(AST_WHILE,0,$2,$3,0,0); }
     | KW_IF expr KW_THEN cmd if_body        { $$ = astCreate(AST_IF,0,$2,$4,$5,0); }
@@ -168,9 +158,9 @@ expr:
       LIT_INTEGER                     { $$ = astCreateSymbol($1); }
     | LIT_CHAR                        { $$ = astCreateSymbol($1); }
     | TK_IDENTIFIER '[' expr ']'      { $$ = astCreate(AST_ARR_ELEMENT,$1,$3,0,0,0); }
-    | TK_IDENTIFIER '(' exprlist')'   { $$ = astCreate(AST_FUNC_CALL,$1,$3,0,0,0); } 
+    | TK_IDENTIFIER '(' exprlist ')'  { $$ = astCreate(AST_FUNC_CALL,$1,$3,0,0,0); } 
     | TK_IDENTIFIER                   { $$ = astCreateSymbol($1); }        
-    | KW_READ                         { $$ = 0; }
+    | KW_READ                         { $$ = astCreate(AST_READ,0,0,0,0,0); }
     | expr '+' expr                   { $$ = astCreate(AST_ADD,0,$1,$3,0,0); }      
     | expr '-' expr                   { $$ = astCreate(AST_SUB,0,$1,$3,0,0); }        
     | expr '*' expr                   { $$ = astCreate(AST_MUL,0,$1,$3,0,0); }
