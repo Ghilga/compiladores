@@ -20,18 +20,18 @@ void checkAndSetDeclarations(AST *node){
 
     switch (node->type){
         case AST_FUNC_DECL:
-            if (isValidDeclaration(node))
+            if (isValidDeclaration(node->son[0]))
                 node->son[0]->symbol->type = SYMBOL_FUNCTION;
             else 
-                printDeclarationError(node, "function");
+                printDeclarationError(node->son[0], "function");
 
             setDeclarationDataType(node->son[0]);    
         break;
         case AST_DECL:  
-            if (isValidDeclaration(node))
+            if (isValidDeclaration(node->son[0]))
                 node->son[0]->symbol->type = SYMBOL_VARIABLE;
             else 
-                printDeclarationError(node, "variable");
+                printDeclarationError(node->son[0], "variable");
 
             setDeclarationDataType(node->son[0]);      
         break;
@@ -59,9 +59,9 @@ void checkUndeclared(){
 
 void printDeclarationError(AST *node, char* errorMessage){
     if(node->symbol->text != NULL)
-        fprintf(stderr, "Semantic ERROR: %s %s already declared\n", errorMessage, node->symbol->text);
+        fprintf(stderr, "Semantic Error: %s %s already declared\n", errorMessage, node->symbol->text);
     else
-        fprintf(stderr, "Semantic ERROR: %s is already declared and text is null\n", errorMessage);
+        fprintf(stderr, "Semantic Error: %s is already declared and text is null\n", errorMessage);
 }
 
 int isValidDeclaration(AST *node){

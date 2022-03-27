@@ -5,17 +5,21 @@
 
 #define HASH_SIZE 997
 enum{
-    SYMBOL_IDENTIFIER = 1,
+    SYMBOL_IDENTIFIER = 100,
     SYMBOL_LIT_INT,
     SYMBOL_LIT_CHAR,
     SYMBOL_STRING,
     SYMBOL_VARIABLE,
     SYMBOL_FUNCTION,
-    SYMBOL_VECTOR,
-    DATATYPE_INT,
+    SYMBOL_VECTOR
+};
+
+enum{
+    DATATYPE_INT = 200,
     DATATYPE_CHAR,
     DATATYPE_FLOAT
 };
+
 typedef struct hash_node
 {
     int type;
