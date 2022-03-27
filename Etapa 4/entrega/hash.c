@@ -56,7 +56,7 @@ void hashPrint(void)
     HASH_NODE *node;
     for (i=0; i<HASH_SIZE; i++)
         for (node=Table[i]; node; node = node -> next)
-            printf("Table[%d] has %s with type %d\n", i, node->text, node->type);
+            printf("Table[%d] has %s with data type %d\n", i, node->text, node->dataType);
 }
 
 int hashCheckUndeclared(void){

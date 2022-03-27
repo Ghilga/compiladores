@@ -25,7 +25,7 @@ void checkAndSetDeclarations(AST *node){
             else 
                 printDeclarationError(node, "function");
 
-            //setDeclarationDataType(node->son[0]);    
+            setDeclarationDataType(node->son[0]);    
         break;
         case AST_DECL:  
             if (isValidDeclaration(node))
@@ -33,7 +33,7 @@ void checkAndSetDeclarations(AST *node){
             else 
                 printDeclarationError(node, "variable");
 
-            //setDeclarationDataType(node->son[0]);      
+            setDeclarationDataType(node->son[0]);      
         break;
 
     }
