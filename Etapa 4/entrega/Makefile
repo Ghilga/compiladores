@@ -1,5 +1,9 @@
 # Autor: Leonardo de Souza Augusto - 278998 
+FLAGS = -g
+SRC = main.c lex.yy.c y.tab.c decompiler.c hash.c ast.c semantic.c
 
+etapa: clean lex.yy.c y.tab.c
+	gcc $(FLAGS) $(SRC) -o etapa4
 
 etapa4: clean main.o y.tab.o lex.yy.o decompiler.o hash.o ast.o semantic.o
 	gcc main.o lex.yy.o y.tab.o decompiler.o hash.o ast.o semantic.o -o etapa4

@@ -1,10 +1,11 @@
-//Autor: Leonardo de Souza Augusto - 278998
+// Autor: Leonardo de Souza Augusto - 278998
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "hash.h"
 #include "ast.h"
 #include "decompiler.h"
+#include "semantic.h"
 
 
 extern int isRunning();
@@ -40,6 +41,13 @@ int main(int argc, char **argv) {
 
     hashPrint();
     astPrint(fullAst,0);
+    checkAndSetDeclarations(fullAst);
+    checkUndeclared();
+    int semanticErrors = getSemanticErrors();
+    if (semanticErrors > 0){
+        printf("Total semantic errors: %d\n", semanticErrors);
+        exit(4);
+    }
     decompile(fullAst, outputFile);
     printf("Success!\n");
     exit(0);

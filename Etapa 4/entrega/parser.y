@@ -1,3 +1,5 @@
+// Autor: Leonardo de Souza Augusto - 278998
+
 %{
   #include <stdio.h>
   #include <stdlib.h>
@@ -75,7 +77,7 @@ program: decl { fullAst = $1; }
 
 decl: 
       dec remainder             { $$ = astCreate(AST_DECL,0,$1,$2,0,0);}
-    | decfunc remainderfunc     { $$ = astCreate(AST_DECL,0,$1,$2,0,0);}
+    | decfunc remainderfunc     { $$ = astCreate(AST_FUNC_DECL,0,$1,$2,0,0);}
     |                           { $$ = 0; }
     ;
 

@@ -37,6 +37,7 @@ void astPrint(AST *node, int level){
         case AST_ATTR: fprintf(stderr, "AST_ATTR"); break;
         case AST_LABEL: fprintf(stderr, "AST_LABEL"); break;
         case AST_DECL: fprintf(stderr, "AST_DECL"); break;
+        case AST_FUNC_DECL: fprintf(stderr, "AST_FUNC_DECL"); break;
         case AST_DEC_INTFUNC: fprintf(stderr, "AST_DEC_INTFUNC"); break;
         case AST_DEC_CHARFUNC: fprintf(stderr, "AST_DEC_CHARFUNC"); break;
         case AST_DEC_FLOATFUNC: fprintf(stderr, "AST_DEC_FLOATFUNC"); break;

@@ -1,4 +1,4 @@
-/*Autor: Leonardo de Souza Augusto - 278998 */
+/* Autor: Leonardo de Souza Augusto - 278998 */
 
 %{
 #include "ast.h"
@@ -34,10 +34,10 @@ return              { return KW_RETURN; }
 "!="                { return OPERATOR_DIF; }
 
 [-*.,;:{}()\[\]/<>=_+] { return yytext[0]; }
-\"([^"\n]|\\\")+\"  { yylval.symbol = hashInsert(yytext, SYMBOL_STRING); return SYMBOL_STRING; }
-[0-9]+              { yylval.symbol = hashInsert(yytext, SYMBOL_LIT_INTEGER); return SYMBOL_LIT_INTEGER; }
-\'.\'               { yylval.symbol = hashInsert(yytext, SYMBOL_LIT_CHAR); return SYMBOL_LIT_CHAR; }
-[a-z_-]+            { yylval.symbol = hashInsert(yytext, SYMBOL_IDENTIFIER); return SYMBOL_IDENTIFIER; }
+\"([^"\n]|\\\")+\"  { yylval.symbol = hashInsert(yytext, SYMBOL_STRING); return LIT_STRING; }
+[0-9]+              { yylval.symbol = hashInsert(yytext, SYMBOL_LIT_INT); return LIT_INTEGER; }
+\'.\'               { yylval.symbol = hashInsert(yytext, SYMBOL_LIT_CHAR); return LIT_CHAR; }
+[a-z_-]+            { yylval.symbol = hashInsert(yytext, SYMBOL_IDENTIFIER); return TK_IDENTIFIER; }
 
 \n                  { lineNumber++; }
 [ \t]

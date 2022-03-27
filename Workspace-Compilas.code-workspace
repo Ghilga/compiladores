@@ -12,6 +12,7 @@
 	],
 	"settings": {
 		"files.associations": {
+			"*.y": "yacc",
 			"*.l": "lex",
 			"stdio.h": "c",
 			"hash.h": "c",
