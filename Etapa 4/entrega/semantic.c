@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 int semanticErrors = 0;
-int dataTypeMap[100] = {
+int dataTypeMap[300] = {
     [AST_DECINT] = DATATYPE_INT,
     [AST_DEC_INTFUNC] = DATATYPE_INT,
     [AST_DECCHAR] = DATATYPE_CHAR,
@@ -25,7 +25,7 @@ void checkAndSetDeclarations(AST *node){
             else 
                 printDeclarationError(node->son[0], "function");
 
-            setDeclarationDataType(node->son[0]);    
+            setDeclarationDataType(node);    
         break;
         case AST_DECL:  
             if (isValidDeclaration(node->son[0]))
@@ -33,7 +33,7 @@ void checkAndSetDeclarations(AST *node){
             else 
                 printDeclarationError(node->son[0], "variable");
 
-            setDeclarationDataType(node->son[0]);      
+            setDeclarationDataType(node);    
         break;
 
     }
@@ -43,14 +43,14 @@ void checkAndSetDeclarations(AST *node){
 }
 
 void setDeclarationDataType(AST *node){
-    if (node == 0)
+    if (node->son[0] == 0)
         return;
-    if (node->symbol == 0){
+    if (node->son[0]->symbol == 0){
         fprintf(stderr, "Null Symbol when declaring data type \n");
         return;
     }
 
-    node->symbol->dataType = dataTypeMap[node->symbol->type];
+    node->son[0]->symbol->dataType = dataTypeMap[node->son[0]->type];
 }
 
 void checkUndeclared(){

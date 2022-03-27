@@ -39,10 +39,10 @@ int main(int argc, char **argv) {
 
     yyparse();
 
-    hashPrint();
     astPrint(fullAst,0);
     checkAndSetDeclarations(fullAst);
     checkUndeclared();
+    hashPrint();
     int semanticErrors = getSemanticErrors();
     if (semanticErrors > 0){
         printf("Total semantic errors: %d\n", semanticErrors);
