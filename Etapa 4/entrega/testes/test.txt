@@ -4,9 +4,8 @@ float c: 4/2;
 int a: 10;
 int main(){}
 int main(int a, char b, float c){
-    print "testando", "teste2", "teste3";
-    
-    x = x + 10 - 5 + 4/2;
+    a = 1 + 1/2;
+    x = x + 10 + 5 + 4/2;
     x = a;
     a = 4;
     b = 10;

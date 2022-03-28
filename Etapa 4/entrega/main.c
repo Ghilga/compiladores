@@ -42,6 +42,7 @@ int main(int argc, char **argv) {
     astPrint(fullAst,0);
     checkAndSetDeclarations(fullAst);
     checkUndeclared();
+    checkOperands(fullAst);
     hashPrint();
     int semanticErrors = getSemanticErrors();
     if (semanticErrors > 0){

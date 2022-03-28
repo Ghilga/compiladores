@@ -14,7 +14,9 @@ void setDeclarationDataType(AST *node);
 void checkUndeclared();
 void checkOperands(AST *node);
 void printDeclarationError(AST *node, char* errorMessage);
+void printOperationError(AST *node, char* operand, char* operation); 
 int isValidDeclaration(AST *node);
+int isValidOperand(AST *node);
 int getSemanticErrors();
 
 #endif
