@@ -57,8 +57,10 @@ void checkAndSetDeclarations(AST *node){
                     else 
                         printDeclarationError(node, "array");
                     // Check size and initialization of array
-                    if (!isValidArrayDeclaration(node->son[0]))
+                    if (!isValidArrayDeclaration(node->son[0])){
                         fprintf(stderr,"Semantic Error: Wrong declaration of array '%s'\n", node->symbol->text);
+                        semanticErrors++;
+                    }
                 }
             }
         break;
