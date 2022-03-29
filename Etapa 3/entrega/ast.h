@@ -9,8 +9,6 @@
 
 enum{
     AST_SYMBOL = 1,
-    AST_ADD,
-    AST_SUB,
     AST_CMD,
     AST_LCMD,
     AST_ATTR,
@@ -39,6 +37,8 @@ enum{
     AST_ARR_VALUES,
     AST_FUNC_CALL,
     AST_READ,
+    AST_ADD,
+    AST_SUB,
     AST_MUL,
     AST_DIV,
     AST_LESS,

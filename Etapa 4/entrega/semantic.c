@@ -63,19 +63,32 @@ void checkOperands(AST *node){
 
     switch (node->type){
         case AST_ADD:
-            if (!isValidOperand(node->son[0])){
-                printOperationError(node->son[0], "left", "Add");
-                semanticErrors++;
-            }
-            if (!isValidOperand(node->son[1])){
-                printOperationError(node->son[0], "right", "Add");
-                semanticErrors++;
-            }
+            checkLeftAndRightOperands(node, "Add");
+        break;
+        case AST_SUB:
+            checkLeftAndRightOperands(node, "Subtract");
+        break;
+        case AST_MUL:
+            checkLeftAndRightOperands(node, "Multiplicate");
+        break;
+        case AST_DIV:
+            checkLeftAndRightOperands(node, "Divide");
         break;
     }
 
     for (int i=0; i < MAX_SONS; i++)
         checkOperands(node->son[i]);
+}
+
+void checkLeftAndRightOperands(AST *node, char* operation){
+    if (!isValidOperand(node->son[0])){
+        printOperationError("left", operation);
+        semanticErrors++;
+    }
+    if (!isValidOperand(node->son[1])){
+        printOperationError("right", operation);
+        semanticErrors++;
+    }
 }
 
 void printDeclarationError(AST *node, char* errorMessage){
@@ -85,7 +98,7 @@ void printDeclarationError(AST *node, char* errorMessage){
         fprintf(stderr, "Semantic Error: %s is already declared and text is null\n", errorMessage);
 }
 
-void printOperationError(AST *node, char* operand, char* operation){
+void printOperationError(char* operand, char* operation){
     fprintf(stderr, "Semantic Error: invalid %s operand for %s\n", operand, operation);
 }
 
@@ -107,7 +120,12 @@ int isValidOperand(AST *node){
             }
             return FALSE;
         break;
-
+        case AST_ADD:
+        case AST_SUB:
+        case AST_MUL:
+        case AST_DIV:
+            return TRUE;
+        break;
         default: return FALSE;
     }
 }
