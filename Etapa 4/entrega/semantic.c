@@ -81,6 +81,10 @@ void setDeclarationDataType(AST *node){
     node->son[0]->symbol->dataType = dataTypeMap[node->son[0]->type];
 }
 
+void checkUsage(AST *node){
+
+}
+
 void checkUndeclared(){
     semanticErrors += hashCheckUndeclared();
 }

@@ -11,6 +11,7 @@
 
 void checkAndSetDeclarations(AST *node);
 void setDeclarationDataType(AST *node);
+void checkUsage(AST *node);
 void checkUndeclared();
 void checkOperands(AST *node);
 void checkLeftAndRightOperands(AST *node, char *operation);
