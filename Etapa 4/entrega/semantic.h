@@ -16,8 +16,10 @@ void checkOperands(AST *node);
 void checkLeftAndRightOperands(AST *node, char *operation);
 void printDeclarationError(AST *node, char* errorMessage);
 void printOperationError(char* operand, char* operation); 
+int isValidArrayDeclaration(AST *node);
 int isValidDeclaration(AST *node);
 int isValidOperand(AST *node);
+int isArrayDeclaration(AST *node);
 int getSemanticErrors();
 
 #endif

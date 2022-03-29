@@ -1,4 +1,7 @@
-int a: 1;
-int main(){
-    a = 1 + 2 - 3 * 4 / 5;
-}
+int a[3]: 1 2 3 4; 
+char b[3]: 's' 'd' 'd' 'd';
+\\char b: 'b';
+\\int main(int c, char b){
+    \\a = 2;
+    \\a = main('a', b);
+\\}

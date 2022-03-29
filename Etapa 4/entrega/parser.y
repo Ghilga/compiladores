@@ -128,8 +128,8 @@ decfloat:
     ;
 
 array:
-      '[' LIT_INTEGER ']' ':' LIT_INTEGER array_values    { $$ = astCreate(AST_ARRAY,$2,astCreateSymbol($5),$6,0,0); } 
-    | '[' LIT_INTEGER ']' ':' LIT_CHAR array_values       { $$ = astCreate(AST_ARRAY,$2,astCreateSymbol($5),$6,0,0); }
+      '[' LIT_INTEGER ']' ':' LIT_INTEGER array_values    { $$ = astCreate(AST_ARRAY,$2,astCreate(AST_ARR_VALUES,$5,$6,0,0,0),0,0,0); } 
+    | '[' LIT_INTEGER ']' ':' LIT_CHAR array_values       { $$ = astCreate(AST_ARRAY,$2,astCreate(AST_ARR_VALUES,$5,$6,0,0,0),0,0,0); }
     | '[' LIT_INTEGER ']'                                 { $$ = astCreateSymbol($2); }
     ;
 

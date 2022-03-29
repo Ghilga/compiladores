@@ -54,8 +54,8 @@ void decompileDecl(AST *node){
 
 void decompileDecIntChar(AST *node){
     if (node->son[0]->type == AST_ARRAY){
-        fprintf(output, "%s[%s]: %s", node->symbol->text, node->son[0]->symbol->text, node->son[0]->son[0]->symbol->text);
-        decompileArray(node->son[0]->son[1]);
+        fprintf(output, "%s[%s]:", node->symbol->text, node->son[0]->symbol->text);
+        decompileArray(node->son[0]->son[0]);
     }
     else
         fprintf(output, "%s: %s", node->symbol->text, node->son[0]->symbol->text);
