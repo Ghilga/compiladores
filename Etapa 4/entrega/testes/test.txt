@@ -1,7 +1,5 @@
-int a[3]: 1 2 3 4; 
-char b[3]: 's' 'd' 'd';
-int d: 1;
-int main(int c, char q){
-    d = a[1/2];
-    \\a = main('a', b);
+int a: 0;
+int main(){
+   
+
 }

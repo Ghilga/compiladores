@@ -12,7 +12,8 @@ enum{
     SYMBOL_VARIABLE,
     SYMBOL_FUNCTION,
     SYMBOL_VECTOR,
-    SYMBOL_ARGUMENT
+    SYMBOL_ARGUMENT,
+    SYMBOL_LABEL
 };
 
 enum{
@@ -25,6 +26,7 @@ typedef struct hash_node
 {
     int type;
     int dataType;
+    int totalArguments;
     char *text;
     struct hash_node * next;
 } HASH_NODE;
