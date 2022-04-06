@@ -1,6 +1,6 @@
 # Autor: Leonardo de Souza Augusto - 278998 
 FLAGS = -g
-SRC = main.c lex.yy.c y.tab.c decompiler.c hash.c ast.c semantic.c tac.c
+SRC = main.c lex.yy.c y.tab.c decompiler.c hash.c ast.c semantic.c tacs.c
 
 etapa: clean lex.yy.c y.tab.c
 	gcc $(FLAGS) $(SRC) -o etapa5
