@@ -18,7 +18,9 @@ enum{
     TAC_LE,
     TAC_EQ,
     TAC_DIF,
-    TAC_COPY
+    TAC_COPY,
+    TAC_JFALSE,
+    TAC_LABEL
 };
 
 typedef struct tac_node{

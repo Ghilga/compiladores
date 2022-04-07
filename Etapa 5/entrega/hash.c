@@ -80,3 +80,10 @@ HASH_NODE *makeTemp(void){
     sprintf(buffer, "myWeeeird_Temp%d",serial++);
     return hashInsert(buffer, SYMBOL_VARIABLE);
 }
+
+HASH_NODE *makeLabel(void){
+    static int serial = 0;
+    char buffer[256] = "";
+    sprintf(buffer, "myWeeeird_Label%d",serial++);
+    return hashInsert(buffer, SYMBOL_LABEL);
+}
