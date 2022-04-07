@@ -6,6 +6,7 @@
 #include "ast.h"
 #include "decompiler.h"
 #include "semantic.h"
+#include "tacs.h"
 
 
 extern int isRunning();
@@ -26,6 +27,18 @@ FILE* initFile(char *filename, char *modes) {
     return inputFile;
 }
 
+void checkSemanticErrors(){
+    checkAndSetDeclarations(fullAst);
+    checkUndeclared();
+    checkExpressions(fullAst);
+    checkCommands(fullAst);
+    int semanticErrors = getSemanticErrors();
+    if (semanticErrors > 0){
+        printf("Total semantic errors: %d\n", semanticErrors);
+        exit(4);
+    }
+}
+
 int main(int argc, char **argv) {
     if (argc < 3) {
         printf("Call program with 'input.txt output.txt'\n");
@@ -39,17 +52,10 @@ int main(int argc, char **argv) {
 
     yyparse();
 
-    astPrint(fullAst,0);
-    checkAndSetDeclarations(fullAst);
-    checkUndeclared();
-    checkExpressions(fullAst);
-    checkCommands(fullAst);
-    hashPrint();
-    int semanticErrors = getSemanticErrors();
-    if (semanticErrors > 0){
-        printf("Total semantic errors: %d\n", semanticErrors);
-        exit(4);
-    }
+    //astPrint(fullAst,0);
+    //checkSemanticErrors();
+    tacPrintRecursive(generateCode(fullAst));
+    //hashPrint();
     decompile(fullAst, outputFile);
     printf("Success!\n");
     exit(0);

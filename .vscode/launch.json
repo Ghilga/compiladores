@@ -22,6 +22,26 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "(gdb) etapa 5",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Etapa 5/entrega/etapa5",
+            "args": ["testes/test.txt", "testes/out1.txt"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/Etapa 5/entrega",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
+        
     ]
 }

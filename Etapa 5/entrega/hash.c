@@ -73,3 +73,10 @@ int hashCheckUndeclared(void){
         }
     return undeclared;
 }
+
+HASH_NODE *makeTemp(void){
+    static int serial = 0;
+    char buffer[256] = "";
+    sprintf(buffer, "myWeeeird_Temp%d",serial++);
+    return hashInsert(buffer, SYMBOL_VARIABLE);
+}

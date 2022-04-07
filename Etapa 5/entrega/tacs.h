@@ -7,9 +7,18 @@
 #include "ast.h"
 
 enum{
-    TAC_SYMBOL = 1,
+    TAC_SYMBOL = 500,
     TAC_ADD,
-    TAC_SUB
+    TAC_SUB,
+    TAC_DIV,
+    TAC_MUL,
+    TAC_LESS,
+    TAC_GREATER,
+    TAC_GE,
+    TAC_LE,
+    TAC_EQ,
+    TAC_DIF,
+    TAC_COPY
 };
 
 typedef struct tac_node{
@@ -23,9 +32,10 @@ typedef struct tac_node{
 
 TAC *tacCreate (int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2);
 void tacPrint(TAC *tac);
-void tacPrintBackwards(TAC *tac);
+void tacPrintRecursive(TAC *tac);
+TAC *tacJoin(TAC *l1, TAC *l2);
 
 // CODE GENERATION
 
-TAC *generate(AST *node);
+TAC *generateCode(AST *node);
 #endif
