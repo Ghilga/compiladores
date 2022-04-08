@@ -27,7 +27,6 @@ enum{
     AST_IF_ELSE,
     AST_GOTO,
     AST_RETURN,
-    AST_ELSE,
     AST_ARR_ELEMENT,
     AST_ARGLIST,
     AST_ARGINT,

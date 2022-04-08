@@ -1,10 +1,11 @@
 int a: 0;
 int b: 0;
 int c: 0;
+int d[1]: 1;
 int main(){
    a = c + c + b;
    b = a - c - b;
-   b = a * c * b;
+   b = a * c * b * a * b;
    b = a / c / b;
    if (a < c) then;
    if (a > c) then;
@@ -16,4 +17,5 @@ int main(){
 
    } else ;
    c = 777;
+   d[0] = 2;
 }

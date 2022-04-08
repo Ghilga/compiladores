@@ -139,17 +139,17 @@ void decompileCmd(AST *node){
             decompileCmd(node->son[1]);
             break;
         case AST_IF_ELSE:
+            fprintf(output,"if");
+            decompileExpr(node->son[0]);
+            fprintf(output," then\n");
+            decompileCmd(node->son[1]);
+            fprintf(output," else\n");
+            decompileCmd(node->son[2]);
         case AST_IF:
             fprintf(output,"if");
             decompileExpr(node->son[0]);
             fprintf(output," then\n");
             decompileCmd(node->son[1]);
-            if (node->son[2] != 0)
-                decompileCmd(node->son[2]);
-            break;
-        case AST_ELSE:
-            fprintf(output," else\n");
-            decompileCmd(node->son[0]);
             break;
         case AST_GOTO: 
             fprintf(output,"goto %s", node->son[0]->symbol->text);

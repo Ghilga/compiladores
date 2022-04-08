@@ -51,7 +51,6 @@
 %type<ast> expr
 %type<ast> lcmd
 %type<ast> cmd
-%type<ast> if_body
 %type<ast> decl
 %type<ast> array
 %type<ast> array_values
@@ -162,11 +161,6 @@ cmd:
     | KW_RETURN expr                        { $$ = astCreate(AST_RETURN,0,$2,0,0,0); }
     |                                       { $$ = 0; }
     ;
-
-if_body:
-      KW_ELSE cmd   { $$ = astCreate(AST_ELSE,0,$2,0,0,0); }
-    |               { $$ = 0; }
-    ; 
 
 expr: 
       LIT_INTEGER                     { $$ = astCreateSymbol($1); }

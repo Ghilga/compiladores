@@ -75,14 +75,14 @@ int hashCheckUndeclared(void){
 }
 
 HASH_NODE *makeTemp(void){
-    static int serial = 0;
+    static int serial = 1;
     char buffer[256] = "";
     sprintf(buffer, "myWeeeird_Temp%d",serial++);
     return hashInsert(buffer, SYMBOL_VARIABLE);
 }
 
 HASH_NODE *makeLabel(void){
-    static int serial = 0;
+    static int serial = 1;
     char buffer[256] = "";
     sprintf(buffer, "myWeeeird_Label%d",serial++);
     return hashInsert(buffer, SYMBOL_LABEL);
