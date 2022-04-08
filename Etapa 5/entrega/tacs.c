@@ -19,6 +19,8 @@ TAC *makeBoolAndArithmetic(int nodeType, TAC *code0, TAC *code1);
 TAC *makeCopy(HASH_NODE *nodeSymbol, TAC *code0, TAC *code1);
 TAC *makeArrCopy(HASH_NODE *nodeSymbol, TAC *code0, TAC *code1, TAC *code2);
 TAC *makeFunc(HASH_NODE *nodeSymbol, TAC *functionBody);
+TAC *makeFuncCall(HASH_NODE *nodeSymbol, TAC *funcArgs);
+TAC *makeExprList(TAC *code0, TAC *code1); 
 
 TAC *tacCreate (int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC *newTac = 0;
@@ -56,7 +58,9 @@ void tacPrint(TAC *tac){
         case TAC_RETURN: fprintf(stderr,"TAC_RETURN"); break;
         case TAC_PRINT: fprintf(stderr,"TAC_PRINT"); break;
         case TAC_READ: fprintf(stderr,"TAC_READ"); break;
-
+        case TAC_FUNC_CALL: fprintf(stderr,"TAC_FUNC_CALL"); break;
+        case TAC_FUNC_EXPR_LIST: fprintf(stderr,"TAC_FUNC_EXPR_LIST"); break;
+        
         default: fprintf(stderr,"TAC_UNKNOWN"); break;
     }
     fprintf(stderr,", %s", (tac->res)?tac->res->text:"0");
@@ -124,6 +128,9 @@ TAC *generateCode(AST *node){
         case AST_PRINTARGS:
         case AST_PRINT: result = tacJoin(tacJoin(code[0], tacCreate(TAC_PRINT, code[0]?code[0]->res:0, 0, 0)), code[1]); break;
         case AST_READ: result = tacCreate(TAC_READ, makeTemp(), 0, 0); break;
+        case AST_FUNC_CALL: result = makeFuncCall(node->symbol, code[0]); break;
+        case AST_EXPR_LIST: 
+        result = makeExprList(code[0],code[1]); break;
         // Return the union of code for all subtrees
         default: result = tacJoin(code[0], tacJoin(code[1], tacJoin(code[2],code[3]))); break;    
         }
@@ -212,5 +219,56 @@ TAC *makeFunc(HASH_NODE *nodeSymbol, TAC *functionBody){
     );
 }
 
+TAC *makeFuncCall(HASH_NODE *nodeSymbol, TAC*funcArgs){
+    return tacJoin(funcArgs, tacCreate(TAC_FUNC_CALL, makeTemp(), nodeSymbol, 0));
+}
 
+TAC *makeExprList(TAC *code0, TAC *code1){
+    if (code1->next == 0){
+        return tacJoin(
+            tacJoin(
+                code0, 
+                tacCreate(
+                    TAC_FUNC_EXPR_LIST,
+                    code0->res,
+                    0,
+                    0
+                )
+            ),
+            tacJoin(
+                code1, 
+                tacCreate(
+                    TAC_FUNC_EXPR_LIST,
+                    code1->res,
+                    0,
+                    0
+                )
+            )
+        );
+    }
 
+    return tacJoin(
+        code1,
+        tacJoin(
+            code0, 
+            tacCreate(
+                TAC_FUNC_EXPR_LIST,
+                code0->res,
+                0,
+                0
+            )
+        )
+    );
+
+    // tacJoin(
+    //     tacJoin(
+    //         code[1], 
+    //         tacCreate(
+    //             TAC_FUNC_ARG, 
+    //             code[1]?code[1]->res:0, 
+    //             0, 
+    //             0
+    //         )
+    //     ),
+    //     code[2])
+}
