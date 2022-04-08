@@ -22,7 +22,9 @@ enum{
     TAC_ARR_COPY,
     TAC_JMP_FALSE,
     TAC_JMP_TRUE,
-    TAC_LABEL
+    TAC_LABEL,
+    TAC_BEGIN_FUNC,
+    TAC_END_FUNC
 };
 
 typedef struct tac_node{

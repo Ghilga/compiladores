@@ -19,6 +19,7 @@ TAC *makeIfThenElse(TAC *code0, TAC *code1, TAC *code2);
 TAC *makeBoolAndArithmetic(int nodeType, TAC *code0, TAC *code1);
 TAC *makeCopy(HASH_NODE *nodeSymbol, TAC *code0, TAC *code1);
 TAC *makeArrCopy(HASH_NODE *nodeSymbol, TAC *code0, TAC *code1, TAC *code2);
+TAC *makeFunc(HASH_NODE *nodeSymbol, TAC *functionBody);
 
 TAC *tacCreate (int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC *newTac = 0;
@@ -51,6 +52,9 @@ void tacPrint(TAC *tac){
         case TAC_JMP_TRUE: fprintf(stderr,"TAC_JMP_TRUE"); break;
         case TAC_ARR_COPY: fprintf(stderr,"TAC_ARR_COPY"); break;
         case TAC_LABEL: fprintf(stderr,"TAC_LABEL"); break;
+        case TAC_BEGIN_FUNC: fprintf(stderr,"TAC_BEGIN_FUNC"); break;
+        case TAC_END_FUNC: fprintf(stderr,"TAC_END_FUNC"); break;
+        
         default: fprintf(stderr,"TAC_UNKNOWN"); break;
     }
     fprintf(stderr,", %s", (tac->res)?tac->res->text:"0");
@@ -101,16 +105,20 @@ TAC *generateCode(AST *node){
         case AST_LE:
         case AST_EQ:
         case AST_DIF: result = makeBoolAndArithmetic(node->type, code[0], code[1]); break;
-        case AST_ATTR: 
+        case AST_ATTR:
+            // Array  
             if(node->son[1])
                 result = makeArrCopy(node->symbol, code[0], code[1], code[2]); 
+            // Variable
             else
                 result = makeCopy(node->symbol, code[0], code[1]);
         break;
         case AST_IF: result = makeIfThen(code[0],code[1]); break;
         case AST_IF_ELSE: result = makeIfThenElse(code[0],code[1],code[2]); break;
-
-        //return the union of code for all subtrees
+        case AST_DEC_INTFUNC:
+        case AST_DEC_CHARFUNC:
+        case AST_DEC_FLOATFUNC: result = makeFunc(node->symbol, code[1]); break;
+        // Return the union of code for all subtrees
         default: result = tacJoin(code[0], tacJoin(code[1], tacJoin(code[2],code[3]))); break;    
         }
 
@@ -187,4 +195,16 @@ TAC *makeArrCopy(HASH_NODE *nodeSymbol, TAC *code0, TAC *code1, TAC *code2){
                     ,code1?code1->res:0)
                     ); 
 }
+
+TAC *makeFunc(HASH_NODE *nodeSymbol, TAC *functionBody){
+    return tacJoin(
+        tacJoin(
+            tacCreate(TAC_BEGIN_FUNC,nodeSymbol,0,0),
+            functionBody
+        ),
+        tacCreate(TAC_END_FUNC,nodeSymbol,0,0)
+    );
+}
+
+
 
