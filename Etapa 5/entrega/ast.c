@@ -46,6 +46,7 @@ void astPrint(AST *node, int level){
         case AST_PRINT: fprintf(stderr, "AST_PRINT"); break;
         case AST_WHILE: fprintf(stderr, "AST_WHILE"); break;
         case AST_IF: fprintf(stderr, "AST_IF"); break;
+        case AST_IF_ELSE: fprintf(stderr, "AST_IF_ELSE"); break;
         case AST_GOTO: fprintf(stderr, "AST_GOTO"); break;
         case AST_RETURN: fprintf(stderr, "AST_RETURN"); break;
         case AST_ELSE: fprintf(stderr, "AST_ELSE"); break;

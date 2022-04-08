@@ -24,6 +24,7 @@ enum{
     AST_PRINT,
     AST_WHILE,
     AST_IF,
+    AST_IF_ELSE,
     AST_GOTO,
     AST_RETURN,
     AST_ELSE,

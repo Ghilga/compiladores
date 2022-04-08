@@ -156,7 +156,8 @@ cmd:
     | TK_IDENTIFIER '[' expr ']' '=' expr   { $$ = astCreate(AST_ATTR,$1,$3,$6,0,0); }
     | KW_PRINT printargs                    { $$ = astCreate(AST_PRINT,0,$2,0,0,0); }
     | KW_WHILE expr cmd                     { $$ = astCreate(AST_WHILE,0,$2,$3,0,0); }
-    | KW_IF expr KW_THEN cmd if_body        { $$ = astCreate(AST_IF,0,$2,$4,$5,0); }
+    | KW_IF expr KW_THEN cmd                { $$ = astCreate(AST_IF,0,$2,$4,$5,0); }
+    | KW_IF expr KW_THEN cmd KW_ELSE cmd    { $$ = astCreate(AST_IF_ELSE,0,$2,$4,$5,0); }
     | KW_GOTO TK_IDENTIFIER                 { $$ = astCreate(AST_GOTO,0,astCreateSymbol($2),0,0,0); }
     | KW_RETURN expr                        { $$ = astCreate(AST_RETURN,0,$2,0,0,0); }
     |                                       { $$ = 0; }

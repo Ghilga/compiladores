@@ -138,6 +138,7 @@ void decompileCmd(AST *node){
             decompileExpr(node->son[0]);
             decompileCmd(node->son[1]);
             break;
+        case AST_IF_ELSE:
         case AST_IF:
             fprintf(output,"if");
             decompileExpr(node->son[0]);

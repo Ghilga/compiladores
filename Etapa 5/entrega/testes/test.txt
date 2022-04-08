@@ -11,6 +11,9 @@ int main(){
    if (a >= c) then;
    if (a <= c) then;
    if (a == c) then;
-   if (a != c) then;
+   if (a != c) then
+   {
+
+   } else ;
    c = 777;
 }

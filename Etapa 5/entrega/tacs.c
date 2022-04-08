@@ -14,7 +14,7 @@ int astToTacMap[50] = {
     [AST_ATTR] = TAC_COPY
 };
 
-TAC *makeIfThen(TAC *code0, TAC *code1);
+TAC *makeIfThenElse(TAC *code0, TAC *code1, TAC *code2);
 
 TAC *tacCreate (int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC *newTac = 0;
@@ -42,7 +42,7 @@ void tacPrint(TAC *tac){
         case TAC_LE: fprintf(stderr,"TAC_LE"); break;
         case TAC_EQ: fprintf(stderr,"TAC_EQ"); break;
         case TAC_DIF: fprintf(stderr,"TAC_DIF"); break;
-        case TAC_JFALSE: fprintf(stderr,"TAC_JFALSE"); break;
+        case TAC_JMP_FALSE: fprintf(stderr,"TAC_JMP_FALSE"); break;
         case TAC_LABEL: fprintf(stderr,"TAC_LABEL"); break;
         default: fprintf(stderr,"TAC_UNKNOWN"); break;
     }
@@ -108,7 +108,8 @@ TAC *generateCode(AST *node){
                     ,code[1]?code[1]->res:0)
                     ); 
         break;
-        case AST_IF: result = makeIfThen(code[0],code[1]); break;
+        case AST_ELSE: result = makeElse(code[0],code[1]);
+        case AST_IF: result = makeIfThenElse(code[0],code[1],code[2]); break;
 
         //return the union of code for all subtrees
         default: result = tacJoin(code[0], tacJoin(code[1], tacJoin(code[2],code[3]))); break;    
@@ -117,14 +118,21 @@ TAC *generateCode(AST *node){
     return result;
 }
 
-TAC *makeIfThen(TAC *code0, TAC *code1){
-    TAC *jumpTac = 0;
+TAC *makeIfThenElse(TAC *code0, TAC *code1, TAC *code2){
+    TAC *falseJumpTac = 0;
     TAC *labelTac = 0;
     HASH_NODE *newLabel = 0;
     newLabel = makeLabel();
-    jumpTac = tacCreate(TAC_JFALSE, newLabel,code0->res,0);
-    jumpTac->prev = code0;
+
+    falseJumpTac = tacCreate(TAC_JMP_FALSE, newLabel,code0->res,0);
+    falseJumpTac->prev = code0;
+
     labelTac = tacCreate(TAC_LABEL,newLabel,0,0);
     labelTac->prev = code1;
-    return tacJoin(jumpTac, labelTac);
+
+    // if (code2 != 0){
+
+    // }
+    
+    return tacJoin(falseJumpTac, labelTac);
 }

@@ -19,7 +19,7 @@ enum{
     TAC_EQ,
     TAC_DIF,
     TAC_COPY,
-    TAC_JFALSE,
+    TAC_JMP_FALSE,
     TAC_LABEL
 };
 

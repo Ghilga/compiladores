@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 
     yyparse();
 
-    //astPrint(fullAst,0);
+    astPrint(fullAst,0);
     //checkSemanticErrors();
     tacPrintRecursive(generateCode(fullAst));
     //hashPrint();
