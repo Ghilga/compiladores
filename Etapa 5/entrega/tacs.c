@@ -220,35 +220,22 @@ TAC *makeFunc(HASH_NODE *nodeSymbol, TAC *functionBody){
 }
 
 TAC *makeFuncCall(HASH_NODE *nodeSymbol, TAC*funcArgs){
-    return tacJoin(funcArgs, tacCreate(TAC_FUNC_CALL, makeTemp(), nodeSymbol, 0));
+    return tacJoin(
+        tacJoin(
+            funcArgs,
+            tacCreate(
+                TAC_FUNC_EXPR_LIST,
+                funcArgs->res,
+                0,
+                0
+            )
+        ),
+        tacCreate(TAC_FUNC_CALL, makeTemp(), nodeSymbol, 0)
+    );
 }
 
 TAC *makeExprList(TAC *code0, TAC *code1){
-    if (code1->next == 0){
-        return tacJoin(
-            tacJoin(
-                code0, 
-                tacCreate(
-                    TAC_FUNC_EXPR_LIST,
-                    code0->res,
-                    0,
-                    0
-                )
-            ),
-            tacJoin(
-                code1, 
-                tacCreate(
-                    TAC_FUNC_EXPR_LIST,
-                    code1->res,
-                    0,
-                    0
-                )
-            )
-        );
-    }
-
     return tacJoin(
-        code1,
         tacJoin(
             code0, 
             tacCreate(
@@ -257,18 +244,7 @@ TAC *makeExprList(TAC *code0, TAC *code1){
                 0,
                 0
             )
-        )
+        ),
+        code1
     );
-
-    // tacJoin(
-    //     tacJoin(
-    //         code[1], 
-    //         tacCreate(
-    //             TAC_FUNC_ARG, 
-    //             code[1]?code[1]->res:0, 
-    //             0, 
-    //             0
-    //         )
-    //     ),
-    //     code[2])
 }
