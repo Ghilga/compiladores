@@ -11,7 +11,6 @@ int astToTacMap[50] = {
     [AST_LE] = TAC_LE,
     [AST_EQ] = TAC_EQ,
     [AST_DIF] = TAC_DIF,
-    [AST_ATTR] = TAC_COPY,
 };
 
 TAC *makeIfThen(TAC *code0, TAC *code1);
@@ -56,7 +55,8 @@ void tacPrint(TAC *tac){
         case TAC_END_FUNC: fprintf(stderr,"TAC_END_FUNC"); break;
         case TAC_RETURN: fprintf(stderr,"TAC_RETURN"); break;
         case TAC_PRINT: fprintf(stderr,"TAC_PRINT"); break;
-        
+        case TAC_READ: fprintf(stderr,"TAC_READ"); break;
+
         default: fprintf(stderr,"TAC_UNKNOWN"); break;
     }
     fprintf(stderr,", %s", (tac->res)?tac->res->text:"0");
@@ -123,7 +123,7 @@ TAC *generateCode(AST *node){
         case AST_RETURN: result = tacJoin(code[0], tacCreate(TAC_RETURN, code[0]?code[0]->res:0, 0, 0)); break;
         case AST_PRINTARGS:
         case AST_PRINT: result = tacJoin(tacJoin(code[0], tacCreate(TAC_PRINT, code[0]?code[0]->res:0, 0, 0)), code[1]); break;
-
+        case AST_READ: result = tacCreate(TAC_READ, makeTemp(), 0, 0); break;
         // Return the union of code for all subtrees
         default: result = tacJoin(code[0], tacJoin(code[1], tacJoin(code[2],code[3]))); break;    
         }

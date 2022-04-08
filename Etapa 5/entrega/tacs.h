@@ -26,7 +26,8 @@ enum{
     TAC_BEGIN_FUNC,
     TAC_END_FUNC,
     TAC_RETURN,
-    TAC_PRINT
+    TAC_PRINT,
+    TAC_READ
 };
 
 typedef struct tac_node{
