@@ -24,7 +24,9 @@ enum{
     TAC_JMP_TRUE,
     TAC_LABEL,
     TAC_BEGIN_FUNC,
-    TAC_END_FUNC
+    TAC_END_FUNC,
+    TAC_RETURN,
+    TAC_PRINT
 };
 
 typedef struct tac_node{
