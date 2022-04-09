@@ -21,6 +21,8 @@ int main(){
    return 1;
    print "999";
    print "1", "2", "3";
+   label-x:
    a = read;
    a = add(1,2,3);
+   goto label-x;
 }

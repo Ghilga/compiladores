@@ -21,6 +21,7 @@ TAC *makeArrCopy(HASH_NODE *nodeSymbol, TAC *code0, TAC *code1, TAC *code2);
 TAC *makeFunc(HASH_NODE *nodeSymbol, TAC *functionBody);
 TAC *makeFuncCall(HASH_NODE *nodeSymbol, TAC *funcArgs);
 TAC *makeExprList(TAC *code0, TAC *code1); 
+TAC *makeCodeLabel(HASH_NODE *nodeSymbol, TAC *code0); 
 
 TAC *tacCreate (int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC *newTac = 0;
@@ -130,7 +131,7 @@ TAC *generateCode(AST *node){
         case AST_READ: result = tacCreate(TAC_READ, makeTemp(), 0, 0); break;
         case AST_FUNC_CALL: result = makeFuncCall(node->symbol, code[0]); break;
         case AST_EXPR_LIST: result = makeExprList(code[0],code[1]); break;
-        //case AST_LABEL: result = tacCreate
+        case AST_LABEL: result = makeCodeLabel(node->symbol,code[0]); break;
         // Return the union of code for all subtrees
         default: result = tacJoin(code[0], tacJoin(code[1], tacJoin(code[2],code[3]))); break;    
         }
@@ -248,3 +249,11 @@ TAC *makeExprList(TAC *code0, TAC *code1){
         code1
     );
 }
+
+TAC *makeCodeLabel(HASH_NODE *nodeSymbol, TAC *code0){
+    return tacJoin(
+        tacCreate(TAC_LABEL,nodeSymbol,0,0),
+        code0
+    );
+}
+

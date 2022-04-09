@@ -15,4 +15,4 @@ entrega:
 	tar cvzf etapa5.tgz .
 
 clean: 
-	rm -f etapa5 lex.yy.c y.tab.c y.tab.h etapa5.tgz *.o
+	rm -f etapa5 lex.yy.c y.tab.c y.tab.h etapa5.tgz *.o testes/out*.txt
