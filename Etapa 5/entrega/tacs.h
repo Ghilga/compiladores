@@ -30,7 +30,9 @@ enum{
     TAC_READ,
     TAC_FUNC_CALL,
     TAC_FUNC_EXPR_LIST,
-    TAC_GOTO
+    TAC_GOTO,
+    TAC_WHILE_BEGIN,
+    TAC_WHILE_END
 };
 
 typedef struct tac_node{

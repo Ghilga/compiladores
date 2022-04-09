@@ -21,7 +21,9 @@ TAC *makeArrCopy(HASH_NODE *nodeSymbol, TAC *code0, TAC *code1, TAC *code2);
 TAC *makeFunc(HASH_NODE *nodeSymbol, TAC *functionBody);
 TAC *makeFuncCall(HASH_NODE *nodeSymbol, TAC *funcArgs);
 TAC *makeExprList(TAC *code0, TAC *code1); 
-TAC *makeCodeLabel(HASH_NODE *nodeSymbol, TAC *code0); 
+TAC *makeCodeLabel(HASH_NODE *nodeSymbol, TAC *code0);
+TAC *makeWhile(TAC *code0, TAC *code1); 
+
 
 TAC *tacCreate (int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC *newTac = 0;
@@ -62,7 +64,9 @@ void tacPrint(TAC *tac){
         case TAC_FUNC_CALL: fprintf(stderr,"TAC_FUNC_CALL"); break;
         case TAC_FUNC_EXPR_LIST: fprintf(stderr,"TAC_FUNC_EXPR_LIST"); break;
         case TAC_GOTO: fprintf(stderr,"TAC_GOTO"); break;
-        
+        case TAC_WHILE_BEGIN: fprintf(stderr,"TAC_WHILE_BEGIN"); break;
+        case TAC_WHILE_END: fprintf(stderr,"TAC_WHILE_END"); break;
+
         default: fprintf(stderr,"TAC_UNKNOWN"); break;
     }
     fprintf(stderr,", %s", (tac->res)?tac->res->text:"0");
@@ -134,6 +138,8 @@ TAC *generateCode(AST *node){
         case AST_EXPR_LIST: result = makeExprList(code[0],code[1]); break;
         case AST_LABEL: result = makeCodeLabel(node->symbol,code[0]); break;
         case AST_GOTO: result = tacCreate(TAC_GOTO,node->symbol,0,0); break;
+        case AST_WHILE: result = makeWhile(code[0],code[1]); break;
+        
         // Return the union of code for all subtrees
         default: result = tacJoin(code[0], tacJoin(code[1], tacJoin(code[2],code[3]))); break;    
         }
@@ -161,28 +167,28 @@ TAC *makeIfThenElse(TAC *code0, TAC *code1, TAC *code2){
     TAC *ifFalseJumpTac = 0;
     TAC *ifTrueJumpTac = 0;
     TAC *ifEndLabelTac = 0;
-    TAC *elseEndLabelTac = 0;
+    TAC *whileEndLabelTac = 0;
     HASH_NODE *ifEndLabel = 0;
-    HASH_NODE *elseEndLabel = 0;
+    HASH_NODE *whileEndLabel = 0;
     
     ifEndLabel = makeLabel();
-    elseEndLabel = makeLabel();
+    whileEndLabel = makeLabel();
     
     // Jumps
     ifFalseJumpTac = tacCreate(TAC_JMP_FALSE, ifEndLabel,code0->res,0);
     ifFalseJumpTac->prev = code0;
 
-    ifTrueJumpTac = tacCreate(TAC_JMP_TRUE, elseEndLabel,code0->res,0);
+    ifTrueJumpTac = tacCreate(TAC_JMP_TRUE, whileEndLabel,code0->res,0);
     ifTrueJumpTac->prev = code1;
 
     // Labels
     ifEndLabelTac = tacCreate(TAC_LABEL,ifEndLabel,0,0);
     ifEndLabelTac->prev = ifTrueJumpTac;
 
-    elseEndLabelTac = tacCreate(TAC_LABEL,elseEndLabel,0,0);
-    elseEndLabelTac->prev = code2;
+    whileEndLabelTac = tacCreate(TAC_LABEL,whileEndLabel,0,0);
+    whileEndLabelTac->prev = code2;
     
-    return tacJoin(ifFalseJumpTac, tacJoin(ifEndLabelTac, elseEndLabelTac));
+    return tacJoin(ifFalseJumpTac, tacJoin(ifEndLabelTac, whileEndLabelTac));
 }
 
 TAC *makeBoolAndArithmetic(int nodeType, TAC *code0, TAC *code1){
@@ -259,3 +265,28 @@ TAC *makeCodeLabel(HASH_NODE *nodeSymbol, TAC *code0){
     );
 }
 
+TAC *makeWhile(TAC *code0, TAC *code1){
+    TAC *beginJumpTac = 0;
+    TAC *endJumpTac = 0;
+    TAC *beginLabelTac = 0;
+    TAC *endLabelTac = 0;
+    HASH_NODE *beginLabel = 0;
+    HASH_NODE *endLabel = 0;
+
+    // Labels
+    beginLabel = makeLabel();
+    endLabel = makeLabel();
+    beginLabelTac = tacCreate(TAC_LABEL,beginLabel,0,0);
+    endLabelTac = tacCreate(TAC_LABEL,endLabel,0,0);
+
+    // Jumps
+    endJumpTac = tacCreate(TAC_WHILE_BEGIN, endLabel,code0->res,0);
+    endJumpTac->prev = code0;
+
+    beginJumpTac = tacCreate(TAC_WHILE_END, beginLabel,0,0);
+    beginJumpTac->prev = code1;
+
+    endLabelTac->prev = beginJumpTac;
+    
+    return tacJoin(beginLabelTac, tacJoin(endJumpTac, endLabelTac));
+}
