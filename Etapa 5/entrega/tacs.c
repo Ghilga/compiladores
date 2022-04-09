@@ -23,7 +23,7 @@ TAC *makeFuncCall(HASH_NODE *nodeSymbol, TAC *funcArgs);
 TAC *makeExprList(TAC *code0, TAC *code1); 
 TAC *makeCodeLabel(HASH_NODE *nodeSymbol, TAC *code0);
 TAC *makeWhile(TAC *code0, TAC *code1); 
-
+TAC *makeArrElement(HASH_NODE *nodeSymbol, TAC *code0); 
 
 TAC *tacCreate (int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC *newTac = 0;
@@ -66,7 +66,8 @@ void tacPrint(TAC *tac){
         case TAC_GOTO: fprintf(stderr,"TAC_GOTO"); break;
         case TAC_WHILE_BEGIN: fprintf(stderr,"TAC_WHILE_BEGIN"); break;
         case TAC_WHILE_END: fprintf(stderr,"TAC_WHILE_END"); break;
-
+        case TAC_ARR_ELEMENT: fprintf(stderr,"TAC_ARR_ELEMENT"); break;
+        
         default: fprintf(stderr,"TAC_UNKNOWN"); break;
     }
     fprintf(stderr,", %s", (tac->res)?tac->res->text:"0");
@@ -139,7 +140,7 @@ TAC *generateCode(AST *node){
         case AST_LABEL: result = makeCodeLabel(node->symbol,code[0]); break;
         case AST_GOTO: result = tacCreate(TAC_GOTO,node->symbol,0,0); break;
         case AST_WHILE: result = makeWhile(code[0],code[1]); break;
-        
+        case AST_ARR_ELEMENT: result = makeArrElement(node->symbol,code[0]); break;
         // Return the union of code for all subtrees
         default: result = tacJoin(code[0], tacJoin(code[1], tacJoin(code[2],code[3]))); break;    
         }
@@ -289,4 +290,11 @@ TAC *makeWhile(TAC *code0, TAC *code1){
     endLabelTac->prev = beginJumpTac;
     
     return tacJoin(beginLabelTac, tacJoin(endJumpTac, endLabelTac));
+}
+
+TAC *makeArrElement(HASH_NODE *nodeSymbol, TAC *code0){
+    return tacJoin(
+        code0,
+        tacCreate(TAC_ARR_ELEMENT,makeTemp(),nodeSymbol,code0->res)
+    );
 }
