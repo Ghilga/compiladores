@@ -61,6 +61,7 @@ void tacPrint(TAC *tac){
         case TAC_READ: fprintf(stderr,"TAC_READ"); break;
         case TAC_FUNC_CALL: fprintf(stderr,"TAC_FUNC_CALL"); break;
         case TAC_FUNC_EXPR_LIST: fprintf(stderr,"TAC_FUNC_EXPR_LIST"); break;
+        case TAC_GOTO: fprintf(stderr,"TAC_GOTO"); break;
         
         default: fprintf(stderr,"TAC_UNKNOWN"); break;
     }
@@ -132,6 +133,7 @@ TAC *generateCode(AST *node){
         case AST_FUNC_CALL: result = makeFuncCall(node->symbol, code[0]); break;
         case AST_EXPR_LIST: result = makeExprList(code[0],code[1]); break;
         case AST_LABEL: result = makeCodeLabel(node->symbol,code[0]); break;
+        case AST_GOTO: result = tacCreate(TAC_GOTO,node->symbol,0,0); break;
         // Return the union of code for all subtrees
         default: result = tacJoin(code[0], tacJoin(code[1], tacJoin(code[2],code[3]))); break;    
         }

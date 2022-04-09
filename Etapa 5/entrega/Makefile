@@ -11,6 +11,11 @@ y.tab.c: parser.y
 lex.yy.c: scanner.l 
 	lex scanner.l 
 
+test:
+	./etapa5 testes/sample.txt testes/out1.txt
+	./etapa5 testes/out1.txt testes/out2.txt
+	diff testes/out1.txt testes/out2.txt
+
 entrega:
 	tar cvzf etapa5.tgz .
 

@@ -152,7 +152,7 @@ cmd:
     | KW_WHILE expr cmd                     { $$ = astCreate(AST_WHILE,0,$2,$3,0,0); }
     | KW_IF expr KW_THEN cmd                { $$ = astCreate(AST_IF,0,$2,$4,0,0); }
     | KW_IF expr KW_THEN cmd KW_ELSE cmd    { $$ = astCreate(AST_IF_ELSE,0,$2,$4,$6,0); }
-    | KW_GOTO TK_IDENTIFIER                 { $$ = astCreate(AST_GOTO,0,astCreateSymbol($2),0,0,0); }
+    | KW_GOTO TK_IDENTIFIER                 { $$ = astCreate(AST_GOTO,$2,0,0,0,0); }
     | KW_RETURN expr                        { $$ = astCreate(AST_RETURN,0,$2,0,0,0); }
     |                                       { $$ = 0; }
     ;

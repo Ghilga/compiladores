@@ -153,7 +153,7 @@ void decompileCmd(AST *node){
             decompileCmd(node->son[1]);
             break;
         case AST_GOTO: 
-            fprintf(output,"goto %s", node->son[0]->symbol->text);
+            fprintf(output,"goto %s", node->symbol->text);
             break;
         case AST_RETURN: 
             fprintf(output,"return");
