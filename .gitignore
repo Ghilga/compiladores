@@ -1,4 +1,5 @@
-a.exe
+out1.txt
+out2.txt
 lex.yy.c
 *.code-workspace
 Workspace-Compilas.code-workspace

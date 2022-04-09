@@ -129,8 +129,8 @@ TAC *generateCode(AST *node){
         case AST_PRINT: result = tacJoin(tacJoin(code[0], tacCreate(TAC_PRINT, code[0]?code[0]->res:0, 0, 0)), code[1]); break;
         case AST_READ: result = tacCreate(TAC_READ, makeTemp(), 0, 0); break;
         case AST_FUNC_CALL: result = makeFuncCall(node->symbol, code[0]); break;
-        case AST_EXPR_LIST: 
-        result = makeExprList(code[0],code[1]); break;
+        case AST_EXPR_LIST: result = makeExprList(code[0],code[1]); break;
+        //case AST_LABEL: result = tacCreate
         // Return the union of code for all subtrees
         default: result = tacJoin(code[0], tacJoin(code[1], tacJoin(code[2],code[3]))); break;    
         }

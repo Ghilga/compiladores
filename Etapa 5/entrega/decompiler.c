@@ -116,8 +116,8 @@ void decompileCmd(AST *node){
             decompileCmd(node->son[1]);
             break;
         case AST_LABEL: 
-            fprintf(output,"%s:\n", node->son[0]->symbol->text);
-            decompileCmd(node->son[1]);
+            fprintf(output,"%s:\n", node->symbol->text);
+            decompileCmd(node->son[0]);
             break;
         case AST_ATTR: 
             fprintf(output,"%s =", node->symbol->text);
@@ -145,6 +145,7 @@ void decompileCmd(AST *node){
             decompileCmd(node->son[1]);
             fprintf(output," else\n");
             decompileCmd(node->son[2]);
+            break;
         case AST_IF:
             fprintf(output,"if");
             decompileExpr(node->son[0]);

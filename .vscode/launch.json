@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) etapa 4",
+            "name": "etapa 4",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/Etapa 4/entrega/etapa4",
@@ -24,11 +24,30 @@
             ]
         },
         {
-            "name": "(gdb) etapa 5",
+            "name": "etapa5 test.txt",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/Etapa 5/entrega/etapa5",
             "args": ["testes/test.txt", "testes/out1.txt"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/Etapa 5/entrega",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "etapa5 sample.txt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Etapa 5/entrega/etapa5",
+            "args": ["testes/sample.txt", "testes/out1.txt"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/Etapa 5/entrega",
             "environment": [],

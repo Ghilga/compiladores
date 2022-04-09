@@ -54,7 +54,6 @@
 %type<ast> decl
 %type<ast> array
 %type<ast> array_values
-%type<ast> label
 %type<ast> program
 %type<ast> dec
 %type<ast> remainder
@@ -139,14 +138,10 @@ array_values:
     |                             { $$ = 0; }
     ;
 
-label:
-      TK_IDENTIFIER ':' { $$ = astCreateSymbol($1); }
-    ;
-
 lcmd: 
-      cmd ';' lcmd    { $$ = astCreate(AST_LCMD,0,$1,$3,0,0); }
-    | label lcmd      { $$ = astCreate(AST_LABEL,0,$1,$2,0,0); }
-    |                 { $$ = 0; }
+      cmd ';' lcmd            { $$ = astCreate(AST_LCMD,0,$1,$3,0,0); }
+    | TK_IDENTIFIER ':' lcmd  { $$ = astCreate(AST_LABEL,$1,$3,0,0,0); }
+    |                         { $$ = 0; }
     ;
 
 cmd: 
