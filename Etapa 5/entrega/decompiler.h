@@ -1,3 +1,5 @@
+// Autor: Leonardo de Souza Augusto - 278998
+
 #include "ast.h"
 
 void decompile(AST *tree, FILE * outputFile);

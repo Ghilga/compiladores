@@ -1,3 +1,5 @@
+// Autor: Leonardo de Souza Augusto - 278998
+
 #include "tacs.h"
 
 int astToTacMap[50] = {

@@ -1,3 +1,5 @@
+// Autor: Leonardo de Souza Augusto - 278998
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "decompiler.h"

@@ -1,3 +1,5 @@
+// Autor: Leonardo de Souza Augusto - 278998
+
 #ifndef TACS_HEADER
 #define TACS_HEADER
 
